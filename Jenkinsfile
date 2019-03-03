@@ -11,18 +11,21 @@ pipeline {
 
   stages {
     stage('Build') {
+      agent any
       steps {
         sh 'mvn verify'
       }
     }
 
     stage('Make Container') {
+      agent any
       steps {
         sh "docker build -t ${DOCKER_REPO_NAME}:latest ."
       }
     }
 
     stage('Push Container') {
+      agent any
       when {
         branch 'master'
       }
