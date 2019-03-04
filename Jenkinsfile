@@ -40,6 +40,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
           sh "docker login -u ${USERNAME} -p ${PASSWORD}"
           sh "docker push ${DOCKER_REPO_NAME}:latest"
+          echo "${VERSION}"
         }
       }
     }
