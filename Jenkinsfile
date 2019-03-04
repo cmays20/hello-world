@@ -2,6 +2,7 @@ pipeline {
   agent none
   environment {
     DOCKER_REPO_NAME = "cmays/hello-world"
+    VERSION = ""
   }
 
   tools {
@@ -13,7 +14,7 @@ pipeline {
     stage('Build') {
       agent any
       steps {
-        VERSION = sh '$(mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout --batch-mode'
+        def VERSION = sh(script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout --batch-mode',returnStdout: true)
         echo $VERSION
         sh 'mvn verify'
       }
