@@ -14,7 +14,9 @@ pipeline {
     stage('Build') {
       agent any
       steps {
-        def VERSION = sh(script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout --batch-mode',returnStdout: true)
+        script  {
+          VERSION = sh(script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout --batch-mode',returnStdout: true)
+        }
         echo $VERSION
         sh 'mvn verify'
       }
