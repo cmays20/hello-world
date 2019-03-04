@@ -2,8 +2,9 @@ pipeline {
   agent none
   environment {
     DOCKER_REPO_NAME = "cmays/hello-world"
-    VERSION = ""
   }
+
+  def VERSION = 'UNKNOWN'
 
   tools {
     jdk "Java8"
@@ -17,7 +18,7 @@ pipeline {
         script  {
           VERSION = sh(script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout --batch-mode',returnStdout: true)
         }
-        echo $VERSION
+        echo "${VERSION}"
         sh 'mvn verify'
       }
     }
