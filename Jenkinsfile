@@ -1,10 +1,11 @@
+#!/usr/bin/env groovy
+def VERSION = 'UNKNOWN'
+
 pipeline {
   agent none
   environment {
     DOCKER_REPO_NAME = "cmays/hello-world"
   }
-
-  def VERSION = 'UNKNOWN'
 
   tools {
     jdk "Java8"
