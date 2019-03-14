@@ -52,7 +52,7 @@ pipeline {
       }
       steps {
         withCredentials([usernamePassword(credentialsId: 'dcos-credentials', usernameVariable: 'DCOS_USERNAME', passwordVariable: 'DCOS_PASSWORD')]) {
-          sh 'apk add curl'
+          sh 'apk add musl-dev'
           sh 'sed -e "s/:APP_ENV:/prod/g" -e "s|:APP_VERSION:|${VERSION}|g" config/marathon.json.template > marathon.json'
           sh '[ -d /usr/local/bin ] || sudo mkdir -p /usr/local/bin'
           sh 'curl https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-1.12/dcos -o dcos'
