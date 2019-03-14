@@ -44,5 +44,15 @@ pipeline {
         }
       }
     }
+
+    stage('Deploy') {
+      sed -e "s/:APP_ENV:/prod/g" -e "s|:APP_VERSION:|${VERSION}|g" config/marathon.json.template > marathon.json
+      [ -d /usr/local/bin ] || sudo mkdir -p /usr/local/bin
+      curl https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-1.12/dcos -o dcos
+      sudo mv dcos /usr/local/bin
+      sudo chmod +x /usr/local/bin/dcos
+      dcos cluster setup https://cmays-demo-763478160.us-west-2.elb.amazonaws.com
+      dcos marathon app add marathon.json
+    }
   }
 }
