@@ -51,13 +51,16 @@ pipeline {
         branch 'master'
       }
       steps {
-        sh 'sed -e "s/:APP_ENV:/prod/g" -e "s|:APP_VERSION:|${VERSION}|g" config/marathon.json.template > marathon.json'
-        sh '[ -d /usr/local/bin ] || sudo mkdir -p /usr/local/bin'
-        sh 'curl https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-1.12/dcos -o dcos'
-        sh 'sudo mv dcos /usr/local/bin'
-        sh 'sudo chmod +x /usr/local/bin/dcos'
-        sh 'dcos cluster setup https://cmays-demo-763478160.us-west-2.elb.amazonaws.com'
-        sh 'dcos marathon app add marathon.json'
+        withCredentials([usernamePassword(credentialsId: 'dcos-credentials', usernameVariable: 'DCOS_USERNAME', passwordVariable: 'DCOS_PASSWORD')]) {
+          sh 'apk add curl'
+          sh 'sed -e "s/:APP_ENV:/prod/g" -e "s|:APP_VERSION:|${VERSION}|g" config/marathon.json.template > marathon.json'
+          sh '[ -d /usr/local/bin ] || sudo mkdir -p /usr/local/bin'
+          sh 'curl https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-1.12/dcos -o dcos'
+          sh 'sudo mv dcos /usr/local/bin'
+          sh 'sudo chmod +x /usr/local/bin/dcos'
+          sh 'dcos cluster setup https://cmays-demo-763478160.us-west-2.elb.amazonaws.com --username=$DCOS_USERNAME --password=$DCOS_PASSWORD'
+          sh 'dcos marathon app add marathon.json'
+        }
       }
     }
   }
