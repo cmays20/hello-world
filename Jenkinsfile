@@ -20,7 +20,7 @@ pipeline {
           VERSION = sh(script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout --batch-mode',returnStdout: true)
         }
         echo "${VERSION}"
-        sh 'mvn verify'
+        sh 'mvn verify sonar:sonar'
       }
     }
 
