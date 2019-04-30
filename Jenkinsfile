@@ -13,7 +13,7 @@ pipeline {
 
   stages {
     stage('Build') {
-      agent any
+      agent {label 'kube-slave'}
       steps {
         script  {
           VERSION = sh(script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout --batch-mode',returnStdout: true)
@@ -22,14 +22,14 @@ pipeline {
     }
 
     stage('Make Container') {
-      agent any
+      agent {label 'kube-slave'}
       steps {
         sh "docker build -t ${DOCKER_REPO_NAME}:${VERSION} ."
       }
     }
 
     stage('Push Container') {
-      agent any
+      agent {label 'kube-slave'}
       when {
         branch 'master'
       }
