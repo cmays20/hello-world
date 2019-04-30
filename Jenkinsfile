@@ -8,6 +8,7 @@ pipeline {
   }
 
   tools {
+    jdk "jdk8"
     maven "M3"
   }
 
@@ -15,7 +16,7 @@ pipeline {
     stage('Build') {
       agent {label 'kube-slave'}
       steps {
-        container('jenkins-dind') {
+        container('jnlp') {
           script  {
             VERSION = sh(script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout --batch-mode',returnStdout: true)
           }
@@ -27,7 +28,7 @@ pipeline {
     stage('Make Container') {
       agent {label 'kube-slave'}
       steps {
-        container('jenkins-dind') {
+        container('dind') {
           sh "docker build -t ${DOCKER_REPO_NAME}:${VERSION} ."
         }
       }
@@ -39,7 +40,7 @@ pipeline {
         branch 'master'
       }
       steps {
-          container('jenkins-dind') {
+          container('dind') {
           withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             sh "docker login -u ${USERNAME} -p ${PASSWORD}"
             sh "docker push ${DOCKER_REPO_NAME}:${VERSION}"
