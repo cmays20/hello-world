@@ -28,7 +28,7 @@ pipeline {
       agent {label 'kube-slave'}
       steps {
         container('dind') {
-          sh "docker build -t ${DOCKER_REPO_NAME}:${VERSION} ."
+          sh "docker build --network host -t ${DOCKER_REPO_NAME}:${VERSION} ."
         }
       }
     }
