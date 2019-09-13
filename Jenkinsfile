@@ -3,6 +3,9 @@ def VERSION = 'UNKNOWN'
 
 pipeline {
   agent none
+  parameters {
+    string(name: 'DOCKER_REPO_NAME', defaultValue: '', description: 'The registry/repo/project to store the image in.')
+  }
 
   tools {
     maven "M3"
@@ -24,11 +27,6 @@ pipeline {
     stage('Make Container') {
       agent {label 'kube-slave'}
       steps {
-        properties([
-            parameters([
-                string(name: 'DOCKER_REPO_NAME', defaultValue: '', description: 'The registry/repo/project to store the image in.')
-            ])
-          ])
         container('dind') {
           sh "docker build --network host -t ${params.DOCKER_REPO_NAME}:${VERSION} ."
         }
