@@ -2,7 +2,7 @@
 def VERSION = 'UNKNOWN'
 
 pipeline {
-  agent none
+  agent any
   parameters {
     string(name: 'DOCKER_REPO_NAME', defaultValue: '', description: 'The registry/repo/project to store the image in.')
   }
