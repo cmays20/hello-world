@@ -5,7 +5,7 @@ pipeline {
   agent none
   properties([
     parameters([
-        string(name: 'DOCKER_REPO_NAME', defaultValue: '', description: 'The registry/repo/project to store the image in.', trim: true)
+        string(name: 'DOCKER_REPO_NAME', defaultValue: '', description: 'The registry/repo/project to store the image in.')
     ])
   ])
 
