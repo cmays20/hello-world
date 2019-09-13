@@ -3,7 +3,11 @@ def VERSION = 'UNKNOWN'
 
 pipeline {
   agent none
-  properties([parameters([string(defaultValue: '', description: 'The registry/repo/project to store the image in.', name: 'DOCKER_REPO_NAME', trim: false)])])
+  properties([
+    parameters([
+        string(name: 'DOCKER_REPO_NAME', defaultValue: '', description: 'The registry/repo/project to store the image in.', trim: true)
+    ])
+  ])
 
   tools {
     maven "M3"
@@ -14,8 +18,6 @@ pipeline {
       agent {label 'kube-slave'}
       steps {
         container('java') {
-          sh 'echo hello'
-          sh 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version'
           script  {
             VERSION = sh(script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout --batch-mode',returnStdout: true)
           }
