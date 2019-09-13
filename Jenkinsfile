@@ -3,8 +3,8 @@ def VERSION = 'UNKNOWN'
 
 pipeline {
   agent none
-  environment {
-    DOCKER_REPO_NAME = "cmays/hello-world"
+  parameters {
+    string(name: 'DOCKER_REPO_NAME', description: "The registriy/repo/project to store the image in.")
   }
 
   tools {
@@ -30,7 +30,7 @@ pipeline {
       agent {label 'kube-slave'}
       steps {
         container('dind') {
-          sh "docker build --network host -t ${DOCKER_REPO_NAME}:${VERSION} ."
+          sh "docker build --network host -t ${params.DOCKER_REPO_NAME}:${VERSION} ."
         }
       }
     }
@@ -44,7 +44,7 @@ pipeline {
           container('dind') {
           withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-            sh "docker push ${DOCKER_REPO_NAME}:${VERSION}"
+            sh "docker push ${params.DOCKER_REPO_NAME}:${VERSION}"
             echo "${VERSION}"
           }
         }
