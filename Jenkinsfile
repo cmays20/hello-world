@@ -3,7 +3,6 @@ def VERSION = 'UNKNOWN'
 
 pipeline {
   agent none
-  properties([
   parameters {
     string(name: 'DOCKER_REPO_NAME', description: "The registriy/repo/project to store the image in.")
   }
