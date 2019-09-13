@@ -42,5 +42,9 @@ pipeline {
           }
       }
     }
+
+    stage('Deploy') {
+      
+    }
   }
 }
