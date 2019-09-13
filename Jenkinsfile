@@ -3,9 +3,7 @@ def VERSION = 'UNKNOWN'
 
 pipeline {
   agent none
-  parameters {
-    string(name: 'DOCKER_REPO_NAME', description: "The registriy/repo/project to store the image in.")
-  }
+  properties([parameters([string(defaultValue: '', description: 'The registry/repo/project to store the image in.', name: 'DOCKER_REPO_NAME', trim: false)])])
 
   tools {
     maven "M3"
