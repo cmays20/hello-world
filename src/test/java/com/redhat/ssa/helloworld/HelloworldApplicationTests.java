@@ -1,4 +1,4 @@
-package com.here.techops.helloworld;
+package com.redhat.ssa.helloworld;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

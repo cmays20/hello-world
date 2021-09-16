@@ -1,4 +1,4 @@
-package com.here.techops.helloworld;
+package com.redhat.ssa.helloworld;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
