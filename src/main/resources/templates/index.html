@@ -5,16 +5,18 @@
   <title>Spring Boot Thymeleaf Hello World Example</title>
 </head>
 <style>
-  .helloSpan {
+  .helloDiv {
     margin: auto;
+  }
+
+  .helloSpan {
+    text-align: center;
     font-size: xxx-large;
   }
 </style>
 <body>
-<div>
-  <h2>
+  <div class="helloDiv">
     <span class="helloSpan" th:text="'Hello ' + ${name} + '!!!'"></span>
-  </h2>
-</div>
+  </div>
 </body>
 </html>
