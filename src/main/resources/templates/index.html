@@ -4,10 +4,16 @@
   <meta charset="UTF-8">
   <title>Spring Boot Thymeleaf Hello World Example</title>
 </head>
+<style>
+  .helloSpan {
+    margin: auto;
+    font-size: xxx-large;
+  }
+</style>
 <body>
 <div>
   <h2>
-    <span th:text="'Hello ' + ${name} + '!!!'"></span>
+    <span class="helloSpan" th:text="'Hello ' + ${name} + '!!!'"></span>
   </h2>
 </div>
 </body>
