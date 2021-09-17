@@ -1,0 +1,88 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  labels:
+    app.kubernetes.io/instance: hello-world
+    app.kubernetes.io/name: hello-world
+    pipeline.openshift.io/runtime: java
+    pipeline.openshift.io/runtime-version: openjdk-11-el7
+    pipeline.openshift.io/type: kubernetes
+  name: hello-world
+  namespace: hello-world
+spec:
+  params:
+    - default: hello-world
+      name: APP_NAME
+      type: string
+    - default: 'https://github.com/cmays20/hello-world'
+      name: GIT_REPO
+      type: string
+    - default: master
+      name: GIT_REVISION
+      type: string
+    - default: 'image-registry.openshift-image-registry.svc:5000/hello-world/hello-world'
+      name: IMAGE_NAME
+      type: string
+    - default: .
+      name: PATH_CONTEXT
+      type: string
+    - default: openjdk-11-el7
+      name: VERSION
+      type: string
+    - default: 'maven:3-openjdk-11-slim'
+      name: MAVEN_IMAGE
+      type: string
+  tasks:
+    - name: fetch-repository
+      params:
+        - name: url
+          value: $(params.GIT_REPO)
+        - name: revision
+          value: $(params.GIT_REVISION)
+        - name: subdirectory
+          value: ''
+        - name: deleteExisting
+          value: 'true'
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: workspace
+    - name: maven-build
+      params:
+        - name: MAVEN_IMAGE
+          value: $(params.MAVEN_IMAGE)
+        - name: GOALS
+          value:
+            - verify
+      runAfter:
+        - fetch-repository
+      taskRef:
+        kind: ClusterTask
+        name: maven-with-cache
+      workspaces:
+        - name: source
+          workspace: workspace
+        - name: maven-repo
+          workspace: maven-repo
+        - name: maven-settings
+          workspace: maven-settings
+    - name: build-image
+      params:
+        - name: IMAGE
+          value: $(params.IMAGE_NAME)
+        - name: CONTEXT
+          value: $(params.PATH_CONTEXT)
+      runAfter:
+        - maven-build
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: workspace
+  workspaces:
+    - name: workspace
+    - name: maven-repo
+    - name: maven-settings
