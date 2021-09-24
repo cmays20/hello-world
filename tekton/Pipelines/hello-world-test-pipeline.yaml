@@ -4,49 +4,6 @@ metadata:
   name: hello-world-test
   namespace: hello-world
 spec:
-  finally:
-    - name: report-results-error
-      params:
-        - name: REPO_FULL_NAME
-          value: $(params.REPO_FULL_NAME)
-        - name: SHA
-          value: $(params.SHA)
-        - name: DESCRIPTION
-          value: Build has started
-        - name: STATE
-          value: error
-        - name: TARGET_URL
-          value: >-
-            https://console-openshift-console.apps.mays-demo.sandbox1751.opentlc.com/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
-      taskRef:
-        kind: Task
-        name: github-set-status
-      when:
-        - input: $(tasks.maven-build.status)
-          operator: in
-          values:
-            - Failed
-    - name: report-results-success
-      params:
-        - name: REPO_FULL_NAME
-          value: $(params.REPO_FULL_NAME)
-        - name: SHA
-          value: $(params.SHA)
-        - name: DESCRIPTION
-          value: Build has started
-        - name: STATE
-          value: success
-        - name: TARGET_URL
-          value: >-
-            https://console-openshift-console.apps.mays-demo.sandbox1751.opentlc.com/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
-      taskRef:
-        kind: Task
-        name: github-set-status
-      when:
-        - input: $(tasks.maven-build.status)
-          operator: in
-          values:
-            - Succeeded
   params:
     - default: 'https://github.com/cmays20/hello-world'
       name: GIT_REPO
@@ -78,6 +35,11 @@ spec:
       taskRef:
         kind: Task
         name: github-set-status
+      when:
+        - input: $(params.SHA)
+          operator: notin
+          values:
+            - TEST
     - name: fetch-repository
       params:
         - name: url
@@ -113,6 +75,53 @@ spec:
           workspace: maven-repo
         - name: maven-settings
           workspace: maven-settings
+  finally:
+    - name: report-results-error
+      params:
+        - name: REPO_FULL_NAME
+          value: $(params.REPO_FULL_NAME)
+        - name: SHA
+          value: $(params.SHA)
+        - name: DESCRIPTION
+          value: Build has started
+        - name: STATE
+          value: error
+        - name: TARGET_URL
+          value: >-
+            https://console-openshift-console.apps.mays-demo.sandbox1751.opentlc.com/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+      taskRef:
+        kind: Task
+        name: github-set-status
+      when:
+        - input: $(tasks.maven-build.status)
+          operator: in
+          values:
+            - Failed
+        - input: $(params.SHA)
+          operator: notin
+          values:
+            - TEST
+    - name: report-results-success
+      params:
+        - name: REPO_FULL_NAME
+          value: $(params.REPO_FULL_NAME)
+        - name: SHA
+          value: $(params.SHA)
+        - name: DESCRIPTION
+          value: Build has started
+        - name: STATE
+          value: success
+        - name: TARGET_URL
+          value: >-
+            https://console-openshift-console.apps.mays-demo.sandbox1751.opentlc.com/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+      taskRef:
+        kind: Task
+        name: github-set-status
+      when:
+        - input: $(tasks.maven-build.status)
+          operator: in
+          values:
+            - Succeeded
   workspaces:
     - name: workspace
     - name: maven-repo
