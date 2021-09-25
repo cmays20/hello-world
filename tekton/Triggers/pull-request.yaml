@@ -55,6 +55,8 @@ spec:
             value: $(tt.params.pullreq-repo-full_name)
           - name: SHA
             value: $(tt.params.pullreq-sha)
+          - name: TEKTON_BASE_URL
+            value: console-openshift-console.apps.mays-demo.sandbox810.opentlc.com
         pipelineRef:
           name: hello-world-test
         serviceAccountName: pipeline
@@ -62,10 +64,10 @@ spec:
         workspaces:
           - name: workspace
             persistentVolumeClaim:
-              claimName: maven-workspace
+              claimName: hello-world-workspace
           - name: maven-repo
             persistentVolumeClaim:
-              claimName: maven-repo
+              claimName: hello-world-maven
           - emptyDir: {}
             name: maven-settings
 ---
