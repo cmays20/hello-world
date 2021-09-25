@@ -11,6 +11,8 @@ spec:
   selector:
     matchLabels:
       app: hello-world
+  strategy:
+    type:
   template:
     metadata:
       labels:
@@ -19,6 +21,7 @@ spec:
       containers:
         - name: hello-world
           image: quay.io/cmays20/hello-world:latest
+          imagePullPolicy: always
           ports:
             - containerPort: 8080
               name: web
