@@ -18,6 +18,8 @@ spec:
       type: string
     - name: SHA
       type: string
+    - name: TEKTON_BASE_URL
+      type: string
   tasks:
     - name: github-set-status-pending
       params:
@@ -31,7 +33,7 @@ spec:
           value: pending
         - name: TARGET_URL
           value: >-
-            https://console-openshift-console.apps.mays-demo.sandbox1751.opentlc.com/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(params.TEKTON_BASE_URL)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
         name: github-set-status
@@ -86,7 +88,7 @@ spec:
           value: error
         - name: TARGET_URL
           value: >-
-            https://console-openshift-console.apps.mays-demo.sandbox1751.opentlc.com/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(params.TEKTON_BASE_URL)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
         name: github-set-status
@@ -111,7 +113,7 @@ spec:
           value: success
         - name: TARGET_URL
           value: >-
-            https://console-openshift-console.apps.mays-demo.sandbox1751.opentlc.com/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(params.TEKTON_BASE_URL)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
         name: github-set-status
