@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+  namespace: hello-world
+  labels:
+    app: hello-world
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+        - name: hello-world
+          image: quay.io/cmays20/hello-world:latest
+          ports:
+            - containerPort: 8080
+              name: web
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-svc
+  namespace: hello-world
+spec:
+  selector:
+      app: hello-world
+  ports:
+    - port: 8080
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: hello-world-route
+  namespace: hello-world
+spec:
+  to:
+    kind: Service
+    name: hello-world-svc
+    weight: 100
+  port:
+    targetPort: 8080
+  wildcardPolicy: None

@@ -48,8 +48,6 @@ spec:
           value: $(params.GIT_REVISION)
         - name: deleteExisting
           value: 'true'
-      runAfter:
-        - github-set-status-pending
       taskRef:
         kind: ClusterTask
         name: git-clone
@@ -122,6 +120,10 @@ spec:
           operator: in
           values:
             - Succeeded
+        - input: $(params.SHA)
+          operator: notin
+          values:
+            - TEST
   workspaces:
     - name: workspace
     - name: maven-repo
