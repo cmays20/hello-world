@@ -52,7 +52,7 @@ spec:
             value: $(tt.params.git-revision)
           - name: IMAGE_NAME
             value: >-
-              image-registry.openshift-image-registry.svc:5000/$(tt.params.git-repo-name)/$(tt.params.git-repo-name)
+              quay.io/cmays20/$(tt.params.git-repo-name)
           - name: PATH_CONTEXT
             value: .
           - name: VERSION
@@ -66,10 +66,10 @@ spec:
         workspaces:
           - name: workspace
             persistentVolumeClaim:
-              claimName: pvc-368da08e51
+              claimName: hello-world-workspace
           - name: maven-repo
             persistentVolumeClaim:
-              claimName: maven-repo
+              claimName: hello-world-maven
           - emptyDir: {}
             name: maven-settings
 ---

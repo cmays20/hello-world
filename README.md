@@ -16,3 +16,6 @@ kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/gi
 ##Add secret for access to quay
 This might be best if we add a service account that is custom for this called build-bot
 
+##Add Triggers
+
+##Point Webhook at triggers

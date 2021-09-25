@@ -62,7 +62,7 @@ spec:
         workspaces:
           - name: workspace
             persistentVolumeClaim:
-              claimName: pvc-368da08e51
+              claimName: maven-workspace
           - name: maven-repo
             persistentVolumeClaim:
               claimName: maven-repo

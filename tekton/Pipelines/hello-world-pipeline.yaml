@@ -20,7 +20,7 @@ spec:
     - default: master
       name: GIT_REVISION
       type: string
-    - default: 'image-registry.openshift-image-registry.svc:5000/hello-world/hello-world'
+    - default: 'quay.io/cmays20/hello-world'
       name: IMAGE_NAME
       type: string
     - default: .
