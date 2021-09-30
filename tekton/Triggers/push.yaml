@@ -62,7 +62,6 @@ spec:
             value: 'maven:3-openjdk-11-slim'
         pipelineRef:
           name: hello-world
-        serviceAccountName: pipeline
         timeout: 1h0m0s
         workspaces:
           - name: workspace
