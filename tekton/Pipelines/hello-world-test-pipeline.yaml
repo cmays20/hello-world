@@ -38,7 +38,7 @@ spec:
           value: pending
         - name: TARGET_URL
           value: >-
-            https://$(task.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
         name: github-set-status
@@ -95,7 +95,7 @@ spec:
           value: error
         - name: TARGET_URL
           value: >-
-            https://$(task.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
         name: github-set-status
@@ -120,7 +120,7 @@ spec:
           value: success
         - name: TARGET_URL
           value: >-
-            https://$(task.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
         name: github-set-status
