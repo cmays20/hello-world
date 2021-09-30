@@ -18,9 +18,14 @@ spec:
       type: string
     - name: SHA
       type: string
-    - name: TEKTON_BASE_URL
-      type: string
   tasks:
+    - name: get-route-to-console
+      params:
+        - name: SCRIPT
+          value: "oc get route console -n openshift-console --template='{{ .spec.host }}'"
+      taskRef:
+        kind: ClusterTask
+        name: oc-with-results
     - name: github-set-status-pending
       params:
         - name: REPO_FULL_NAME
@@ -33,7 +38,7 @@ spec:
           value: pending
         - name: TARGET_URL
           value: >-
-            https://$(params.TEKTON_BASE_URL)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(task.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
         name: github-set-status
@@ -42,6 +47,8 @@ spec:
           operator: notin
           values:
             - TEST
+      runAfter:
+        - get-route-to-console
     - name: fetch-repository
       params:
         - name: url
@@ -88,7 +95,7 @@ spec:
           value: error
         - name: TARGET_URL
           value: >-
-            https://$(params.TEKTON_BASE_URL)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(task.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
         name: github-set-status
@@ -113,7 +120,7 @@ spec:
           value: success
         - name: TARGET_URL
           value: >-
-            https://$(params.TEKTON_BASE_URL)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(task.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
         name: github-set-status
