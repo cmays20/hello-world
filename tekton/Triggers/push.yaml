@@ -43,6 +43,7 @@ spec:
       metadata:
         generateName: build-deploy-$(tt.params.git-repo-name)-
       spec:
+        serviceAccountName: build-bot
         params:
           - name: APP_NAME
             value: $(tt.params.git-repo-name)

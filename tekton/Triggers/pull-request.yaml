@@ -44,6 +44,7 @@ spec:
       metadata:
         generateName: test-build-
       spec:
+        serviceAccountName: build-bot
         params:
           - name: GIT_REPO
             value: $(tt.params.git-repo-url)
