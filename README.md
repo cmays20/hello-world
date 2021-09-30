@@ -22,3 +22,6 @@ oc secrets link pipeline quay-registry --for=pull
 
 ##Point Webhook at triggers
 oc get routes
+
+##Allow pipeline service account to read the cluster api
+oc adm policy add-cluster-role-to-user cluster-reader -z pipeline
