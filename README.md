@@ -8,8 +8,12 @@ This app is for demoing OpenShift Pipelines
 
 ##Add Pipelines Operator
 
+##Clone hello-world locally
+
 ##Create hello-world Project
 oc create ns hello-world
+
+##Add Persistent Volumes
 
 ##Add pipeline manifests
 
@@ -23,9 +27,9 @@ kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/gi
 ##Add secret for access to quay
 oc create secret docker-registry quay-registry --docker-server=quay.io --docker-username=<username> --docker-password=<password>
 
-oc secrets link pipeline quay-registry --for=pull
+oc secrets link pipeline quay-registry --for=pull,mount
 
-##Add Triggers
+##Add Triggers and Tasks
 
 ##Point Webhook at triggers
 oc get routes
