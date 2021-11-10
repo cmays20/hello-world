@@ -11,13 +11,16 @@ This app is for demoing OpenShift Pipelines
 ##Clone hello-world locally
 
 ##Create hello-world Project
+
 oc create ns hello-world
+oc project hello-world
 
 ##Add Persistent Volumes
 
 ##Add pipeline manifests
 
 ##Setup Tekton Task github-set-status
+
 Make sure to run from inside namespace hello-world
 
 kubectl create secret generic github --from-literal token="MY_TOKEN" 
