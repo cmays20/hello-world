@@ -31,14 +31,17 @@ kind: Service
 metadata:
   name: hello-world-svc
   namespace: hello-world
+  labels:
+    app: hello-world
 spec:
   selector:
       app: hello-world
   ports:
-    - port: 8080
+    - name: web
+      port: 8080
 ---
-kind: Route
 apiVersion: route.openshift.io/v1
+kind: Route
 metadata:
   name: hello-world-route
   namespace: hello-world
@@ -50,3 +53,17 @@ spec:
   port:
     targetPort: 8080
   wildcardPolicy: None
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: hello-world
+  labels:
+    team: frontend
+spec:
+  selector:
+    matchLabels:
+      app: hello-world
+  endpoints:
+    - port: web
+      path: /actuator/prometheus
