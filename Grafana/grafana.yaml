@@ -1,0 +1,34 @@
+apiVersion: integreatly.org/v1alpha1
+kind: Grafana
+metadata:
+  name: my-grafana
+  namespace: my-grafana
+spec:
+  client:
+    preferService: true
+  config:
+    auth:
+      disable_login_form: false
+      disable_signout_menu: true
+    auth.anonymous:
+      enabled: true
+    log:
+      level: error
+      mode: console
+    log.frontend:
+      enabled: true
+  dashboardLabelSelector:
+    - matchExpressions:
+        - key: app
+          operator: In
+          values:
+            - grafana
+  ingress:
+    enabled: true
+    path: /
+    pathType: Prefix
+  service:
+    labels:
+      app: grafana
+      type: grafana-service
+    name: grafana-service
