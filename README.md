@@ -49,3 +49,21 @@ oc adm policy add-cluster-role-to-user cluster-reader -z pipeline
 Apply the manifest in Monitoring
 
 oc adm policy add-cluster-role-to-user monitoring-edit -z pipeline
+
+##Setup User defined Grafana
+
+https://www.redhat.com/en/blog/custom-grafana-dashboards-red-hat-openshift-container-platform-4
+
+Add Grafana Operator to namespace my-grafana
+
+Create a Grafana instance with the name my-grafana
+
+oc apply -f Grafana/grafana.yaml
+
+oc adm policy add-cluster-role-to-user cluster-monitoring-view -z grafana-serviceaccount
+
+oc serviceaccounts get-token grafana-serviceaccount -n my-grafana
+
+Replace BEARER_TOKEN in grafana-ds.yaml
+
+oc apply -f Grafana/grafana-ds.yaml
