@@ -44,4 +44,8 @@ oc get routes
 
 oc adm policy add-cluster-role-to-user cluster-reader -z pipeline
 
+##Setup for Prometheus Monitoring
+
+Apply the manifest in Monitoring
+
 oc adm policy add-cluster-role-to-user monitoring-edit -z pipeline
