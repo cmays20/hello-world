@@ -13,6 +13,7 @@ This app is for demoing OpenShift Pipelines
 ##Create hello-world Project
 
 oc create ns hello-world
+
 oc project hello-world
 
 ##Add Persistent Volumes
@@ -28,6 +29,7 @@ kubectl create secret generic github --from-literal token="MY_TOKEN"
 kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/github-set-status/0.2/github-set-status.yaml
 
 ##Add secret for access to quay
+
 oc create secret docker-registry quay-registry --docker-server=quay.io --docker-username=<username> --docker-password=<password>
 
 oc secrets link pipeline quay-registry --for=pull,mount
@@ -35,7 +37,11 @@ oc secrets link pipeline quay-registry --for=pull,mount
 ##Add Triggers and Tasks
 
 ##Point Webhook at triggers
+
 oc get routes
 
 ##Allow pipeline service account to read the cluster api
+
 oc adm policy add-cluster-role-to-user cluster-reader -z pipeline
+
+oc adm policy add-cluster-role-to-user monitoring-edit -z pipeline
