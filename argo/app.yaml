@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-world
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: hello-world
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: deploy
+    repoURL: 'https://github.com/cmays20/hello-world.git'
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
