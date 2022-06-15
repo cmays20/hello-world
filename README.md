@@ -3,10 +3,27 @@ This app is for demoing OpenShift Pipelines
 
 #Prerequisites
 
+##Add Pipelines Operator
+
+##Add GitOps Operator
+
+#Setup using ArgoCD
+
+##Setup the namespace and give permissions to ArgoCD Service Account
+
+oc create ns hello-world
+
+oc label namespace hello-world argocd.argoproj.io/managed-by=openshift-gitops
+
+oc policy add-role-to-user monitoring-edit system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n hello-world
+
+##Add ArgoCD Applications
+
+Add the yamls in the argo folder
 
 #Demo Setup
 
-##Add Pipelines Operator
+
 
 ##Clone hello-world locally
 
