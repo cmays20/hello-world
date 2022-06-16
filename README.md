@@ -7,6 +7,10 @@ This app is for demoing OpenShift Pipelines
 
 ##Add GitOps Operator
 
+##Turn on User Monitoring
+
+Apply the yaml in the monitoring folder
+
 #Setup using ArgoCD
 
 ##Setup the namespace and give permissions to ArgoCD Service Account
