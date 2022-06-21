@@ -24,7 +24,7 @@ spec:
         - name: SCRIPT
           value: "oc get route console -n openshift-console --template='{{ .spec.host }}'"
       taskRef:
-        kind: ClusterTask
+        kind: Task
         name: oc-with-results
     - name: github-set-status-pending
       params:
@@ -73,7 +73,7 @@ spec:
       runAfter:
         - fetch-repository
       taskRef:
-        kind: ClusterTask
+        kind: Task
         name: maven-with-cache
       workspaces:
         - name: source
