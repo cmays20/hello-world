@@ -62,7 +62,7 @@ spec:
       runAfter:
         - fetch-repository
       taskRef:
-        kind: ClusterTask
+        kind: Task
         name: maven-with-cache
       workspaces:
         - name: source
