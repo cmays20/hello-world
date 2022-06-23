@@ -15,11 +15,15 @@ Apply the yaml in the monitoring folder
 
 ##Setup the namespace and give permissions to ArgoCD Service Account
 
+```
 oc create ns hello-world
-
 oc label namespace hello-world argocd.argoproj.io/managed-by=openshift-gitops
-
 oc policy add-role-to-user monitoring-edit system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n hello-world
+oc create ns hello-world-dev
+oc label namespace hello-world-dev argocd.argoproj.io/managed-by=openshift-gitops
+oc policy add-role-to-user monitoring-edit system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n hello-world-dev
+```
+
 
 ##Add ArgoCD Applications
 
