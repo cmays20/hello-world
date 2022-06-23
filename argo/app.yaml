@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hello-world
+  name: prod-hello-world
   namespace: openshift-gitops
 spec:
   destination:
@@ -9,8 +9,8 @@ spec:
     server: 'https://kubernetes.default.svc'
   project: default
   source:
-    path: deploy
-    repoURL: 'https://github.com/cmays20/hello-world.git'
+    path: environments/prod
+    repoURL: 'https://github.com/cmays20/hello-world-deploy.git'
     targetRevision: HEAD
   syncPolicy:
     automated:
