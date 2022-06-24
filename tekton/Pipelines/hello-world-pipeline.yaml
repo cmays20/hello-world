@@ -109,7 +109,7 @@ spec:
           value: $(params.MANIFEST_GIT_REPO)
         - name: NEW_IMAGE
           value: $(params.IMAGE_NAME)
-        - name: NEW_TAG
+        - name: NEW_DIGEST
           value: $(tasks.build-image.results.IMAGE_DIGEST)
       taskRef:
         kind: Task
