@@ -32,8 +32,8 @@ spec:
     - default: 'maven:3-openjdk-11-slim'
       name: MAVEN_IMAGE
       type: string
-    - default: deploy
-      name: MANIFEST_DIR
+    - default: 'https://github.com/cmays20/hello-world-deploy'
+      name: MANIFEST_GIT_REPO
       type: string
   tasks:
     - name: fetch-repository
@@ -85,19 +85,38 @@ spec:
       workspaces:
         - name: source
           workspace: workspace
-    - name: deploy
+    - name: fetch-manifest-repository
       params:
-        - name: SCRIPT
-          value: "oc apply -f $(params.MANIFEST_DIR) && oc rollout restart deployment/hello-world"
-      runAfter:
-        - build-image
+        - name: url
+          value: $(params.MANIFEST_GIT_REPO)
+        - name: revision
+          value: $(params.GIT_REVISION)
+        - name: subdirectory
+          value: ''
+        - name: deleteExisting
+          value: 'true'
       taskRef:
         kind: ClusterTask
-        name: openshift-client
+        name: git-clone
       workspaces:
-      - name: manifest-dir
-        workspace: workspace
+        - name: output
+          workspace: manifest-workspace
+    - name: manifest-update-image
+      params:
+        - name: WORKING_DIR
+          value: $(params.MANIFEST_GIT_REPO)
+        - name: NEW_IMAGE
+          value: $(params.IMAGE_NAME)
+        - name: NEW_TAG
+          value: $(tasks.build-image.results.IMAGE_DIGEST)
+      taskRef:
+        kind: Task
+        name: kustomize-update-image
+      workspaces:
+        - name: workspace
+          workspace: manifest-workspace
   workspaces:
     - name: workspace
+    - name: manifest-workspace
     - name: maven-repo
     - name: maven-settings
