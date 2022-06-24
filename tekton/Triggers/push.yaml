@@ -72,6 +72,8 @@ spec:
               claimName: hello-world-maven
           - emptyDir: {}
             name: maven-settings
+          - emptyDir: {}
+            name: manifest-workspace
 ---
 kind: Route
 apiVersion: route.openshift.io/v1
