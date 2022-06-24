@@ -98,6 +98,8 @@ spec:
       taskRef:
         kind: ClusterTask
         name: git-clone
+      runAfter:
+        - build-image
       workspaces:
         - name: output
           workspace: manifest-workspace
@@ -112,6 +114,8 @@ spec:
       taskRef:
         kind: Task
         name: kustomize-update-image
+      runAfter:
+        - fetch-manifest-repository
       workspaces:
         - name: workspace
           workspace: manifest-workspace
