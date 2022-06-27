@@ -117,7 +117,7 @@ spec:
       runAfter:
         - fetch-manifest-repository
       workspaces:
-        - name: workspace
+        - name: output
           workspace: manifest-workspace
   workspaces:
     - name: workspace
