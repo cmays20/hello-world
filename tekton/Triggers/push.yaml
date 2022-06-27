@@ -60,6 +60,8 @@ spec:
             value: openjdk-11-el7
           - name: MAVEN_IMAGE
             value: 'maven:3-openjdk-11-slim'
+          - name: MANIFEST_WORKING_DIR
+            value: environments/prod
         pipelineRef:
           name: hello-world
         timeout: 1h0m0s
