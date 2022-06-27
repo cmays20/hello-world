@@ -35,6 +35,8 @@ spec:
     - default: 'https://github.com/cmays20/hello-world-deploy'
       name: MANIFEST_GIT_REPO
       type: string
+    - name: MANIFEST_WORKING_DIR
+      type: string
   tasks:
     - name: fetch-repository
       params:
@@ -104,7 +106,7 @@ spec:
     - name: manifest-update-image
       params:
         - name: WORKING_DIR
-          value: $(params.MANIFEST_GIT_REPO)
+          value: $(params.MANIFEST_WORKING_DIR)
         - name: NEW_IMAGE
           value: $(params.IMAGE_NAME)
         - name: NEW_DIGEST
