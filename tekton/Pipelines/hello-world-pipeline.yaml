@@ -129,8 +129,8 @@ spec:
           value: |
             whoami
             git remote show origin
-            cat "${PARAM_USER_HOME}/.gitconfig"
-            cat "${PARAM_USER_HOME}/.git-credentials"
+            cat "~/.gitconfig"
+            cat "~/.git-credentials"
             git add $(params.MANIFEST_WORKING_DIR)/kustomization.yaml
             git commit -m "[$(context.taskRun.name)] Image tag updated"
             git remote add basic-auth-origin $(params.MANIFEST_GIT_REPO)
