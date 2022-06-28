@@ -47,6 +47,8 @@ spec:
         params:
           - name: APP_NAME
             value: $(tt.params.git-repo-name)
+          - name: APP_IMAGE_TAG
+            value: $(tt.params.gitbranchname)-$(tt.params.gitshortsha)
           - name: GIT_REPO
             value: $(tt.params.git-repo-url)
           - name: GIT_REVISION
