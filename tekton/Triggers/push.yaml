@@ -85,6 +85,9 @@ spec:
           - name: manifest-workspace
             persistentVolumeClaim:
               claimName: hello-world-manifest-workspace
+          - name: git-config
+            secret:
+              secretName: github-basic-auth-secret
 ---
 kind: Route
 apiVersion: route.openshift.io/v1
