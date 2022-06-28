@@ -120,8 +120,30 @@ spec:
       workspaces:
         - name: output
           workspace: manifest-workspace
+    - name: git-commit
+      params:
+        - name: GIT_SCRIPT
+          value: |
+            git config user.email "tekton-pipelines-ci@redhat.com"
+            git config user.name "tekton-pipelines-ci"
+            git status
+            git add $(params.MANIFEST_WORKING_DIR)/kustomization.yaml
+            git commit -m "[$(context.taskRun.name)] Image tag updated"
+            git remote add origin $(params.MANIFEST_GIT_REPOSITORY)
+            git push origin master
+      taskRef:
+        kind: ClusterTask
+        name: git-cli
+      runAfter:
+        - manifest-update-image
+      workspaces:
+        - name: source
+          workspace: manifest-workspace
+        - name: basic-auth
+          workspace: git-config
   workspaces:
     - name: workspace
     - name: manifest-workspace
     - name: maven-repo
     - name: maven-settings
+    - name: git-config
