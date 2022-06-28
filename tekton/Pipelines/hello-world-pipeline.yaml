@@ -127,6 +127,7 @@ spec:
           value: 'cmays@outlook.com'
         - name: GIT_SCRIPT
           value: |
+            whoami
             git remote show origin
             cat "${PARAM_USER_HOME}/.gitconfig"
             cat "${PARAM_USER_HOME}/.git-credentials"
