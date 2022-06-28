@@ -129,8 +129,8 @@ spec:
             git status
             git add $(params.MANIFEST_WORKING_DIR)/kustomization.yaml
             git commit -m "[$(context.taskRun.name)] Image tag updated"
-            git remote add origin $(params.MANIFEST_GIT_REPO)
-            git push origin master
+            git remote add basic-auth-origin $(params.MANIFEST_GIT_REPO)
+            git push basic-auth-origin master
       taskRef:
         kind: ClusterTask
         name: git-cli
