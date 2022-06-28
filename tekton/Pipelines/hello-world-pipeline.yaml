@@ -23,6 +23,9 @@ spec:
     - default: 'quay.io/cmays20/hello-world'
       name: IMAGE_NAME
       type: string
+    - default: 'latest'
+      name: APP_IMAGE_TAG
+      type: string
     - default: .
       name: PATH_CONTEXT
       type: string
