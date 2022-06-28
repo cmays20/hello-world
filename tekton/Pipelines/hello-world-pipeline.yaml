@@ -79,7 +79,7 @@ spec:
     - name: build-image
       params:
         - name: IMAGE
-          value: $(params.IMAGE_NAME)
+          value: $(params.IMAGE_NAME):$(params.APP_IMAGE_TAG)
         - name: CONTEXT
           value: $(params.PATH_CONTEXT)
       runAfter:
