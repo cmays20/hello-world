@@ -127,9 +127,9 @@ spec:
             git config user.email "tekton-pipelines-ci@redhat.com"
             git config user.name "tekton-pipelines-ci"
             git status
-            git show-ref
             git add $(params.MANIFEST_WORKING_DIR)/kustomization.yaml
             git commit -m "[$(context.taskRun.name)] Image tag updated"
+            git status
             git remote add basic-auth-origin $(params.MANIFEST_GIT_REPO)
             git push basic-auth-origin main
       taskRef:
