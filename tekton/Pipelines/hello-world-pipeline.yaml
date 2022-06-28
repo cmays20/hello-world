@@ -128,6 +128,9 @@ spec:
         - name: GIT_SCRIPT
           value: |
             whoami
+            cd ~
+            pwd
+            cd -
             git remote show origin
             cat "~/.gitconfig"
             cat "~/.git-credentials"
