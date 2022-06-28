@@ -121,12 +121,12 @@ spec:
           workspace: manifest-workspace
     - name: git-commit
       params:
+        - name: GIT_USER_NAME
+          value: 'tekton-pipelines-ci'
+        - name: GIT_USER_EMAIL
+          value: 'tekton-pipelines-ci@redhat.com'
         - name: GIT_SCRIPT
           value: |
-            git config user.email "tekton-pipelines-ci@redhat.com"
-            git config user.name "tekton-pipelines-ci"
-            git status
-            git branch -a
             git add $(params.MANIFEST_WORKING_DIR)/kustomization.yaml
             git commit -m "[$(context.taskRun.name)] Image tag updated"
             git remote add basic-auth-origin $(params.MANIFEST_GIT_REPO)
