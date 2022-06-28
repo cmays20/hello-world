@@ -112,8 +112,8 @@ spec:
           value: $(params.MANIFEST_WORKING_DIR)
         - name: NEW_IMAGE
           value: $(params.IMAGE_NAME)
-        - name: NEW_DIGEST
-          value: $(tasks.build-image.results.IMAGE_DIGEST)
+        - name: NEW_TAG
+          value: $(params.APP_IMAGE_TAG)
       taskRef:
         kind: Task
         name: kustomize-update-image
