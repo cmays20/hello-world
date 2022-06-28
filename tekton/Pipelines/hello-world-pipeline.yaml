@@ -122,9 +122,9 @@ spec:
     - name: git-commit
       params:
         - name: GIT_USER_NAME
-          value: 'tekton-pipelines-ci'
+          value: 'cmays20'
         - name: GIT_USER_EMAIL
-          value: 'tekton-pipelines-ci@redhat.com'
+          value: 'cmays@outlook.com'
         - name: GIT_SCRIPT
           value: |
             git remote show origin
