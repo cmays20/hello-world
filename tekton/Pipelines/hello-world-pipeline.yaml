@@ -127,6 +127,8 @@ spec:
           value: 'tekton-pipelines-ci@redhat.com'
         - name: GIT_SCRIPT
           value: |
+            cat "${PARAM_USER_HOME}/.gitconfig"
+            cat "${PARAM_USER_HOME}/.git-credentials
             git add $(params.MANIFEST_WORKING_DIR)/kustomization.yaml
             git commit -m "[$(context.taskRun.name)] Image tag updated"
             git remote add basic-auth-origin $(params.MANIFEST_GIT_REPO)
