@@ -1,0 +1,89 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  labels:
+    app.kubernetes.io/instance: hello-world
+    app.kubernetes.io/name: hello-world
+    pipeline.openshift.io/type: kubernetes
+  name: promote-dev-to-prod
+  namespace: hello-world
+spec:
+  params:
+    - default: 'quay.io/cmays20/hello-world'
+      name: IMAGE_NAME
+      type: string
+    - default: 'https://github.com/cmays20/hello-world-deploy'
+      name: MANIFEST_GIT_REPO
+      type: string
+    - name: PREVIOUS_WORKING_DIR
+      type: string
+      default: 'environments/dev'
+    - name: MANIFEST_WORKING_DIR
+      type: string
+      default: 'environments/prod'
+  tasks:
+    - name: fetch-manifest-repository
+      params:
+        - name: url
+          value: $(params.MANIFEST_GIT_REPO)
+        - name: subdirectory
+          value: ''
+        - name: deleteExisting
+          value: 'true'
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: manifest-workspace
+    - name: get-git-revision
+      params: 
+        - name: WORKING_DIR
+          value: $(params.PREVIOUS_WORKING_DIR)
+      taskRef:
+        kind: Task
+        name: get-image-tag
+      runAfter:
+        - fetch-manifest-repository
+      workspaces:
+        - name: output
+          workspace: manifest-workspace
+    - name: manifest-update-image
+      params:
+        - name: WORKING_DIR
+          value: $(params.MANIFEST_WORKING_DIR)
+        - name: NEW_IMAGE
+          value: $(params.IMAGE_NAME):$(tasks.get-git-revision.results.image-tag)
+      taskRef:
+        kind: Task
+        name: kustomize-update-image
+      runAfter:
+        - get-git-revision
+      workspaces:
+        - name: output
+          workspace: manifest-workspace
+    - name: git-commit
+      params:
+        - name: GIT_USER_NAME
+          value: 'cmays20'
+        - name: GIT_USER_EMAIL
+          value: 'cmays@outlook.com'
+        - name: GIT_SCRIPT
+          value: |
+            git add $(params.MANIFEST_WORKING_DIR)/kustomization.yaml
+            git commit -m "[$(context.taskRun.name)] Image tag updated"
+            git remote add basic-auth-origin $(params.MANIFEST_GIT_REPO)
+            git push basic-auth-origin HEAD:main
+      taskRef:
+        kind: ClusterTask
+        name: git-cli
+      runAfter:
+        - manifest-update-image
+      workspaces:
+        - name: source
+          workspace: manifest-workspace
+        - name: basic-auth
+          workspace: git-config
+  workspaces:
+    - name: manifest-workspace
+    - name: git-config
