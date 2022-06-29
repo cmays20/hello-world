@@ -15,7 +15,7 @@ spec:
         - name: only-master-branch
           params:
             - name: filter
-              value: body.ref == 'refs/heads/dev'
+              value: body.ref == 'refs/heads/master'
           ref:
             kind: ClusterInterceptor
             name: cel
