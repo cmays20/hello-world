@@ -124,9 +124,6 @@ spec:
           value: 'cmays@outlook.com'
         - name: GIT_SCRIPT
           value: |
-            git remote show origin
-            cat ~/.gitconfig
-            cat ~/.git-credentials
             git add $(params.MANIFEST_WORKING_DIR)/kustomization.yaml
             git commit -m "[$(context.taskRun.name)] Image tag updated"
             git remote add basic-auth-origin $(params.MANIFEST_GIT_REPO)
