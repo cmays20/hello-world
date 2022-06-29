@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: kustomize-update-image
+  namespace: hello-world
+spec:
+  params:
+    - name: WORKING_DIR
+      type: string
+    - name: NEW_IMAGE
+      type: string
+  steps:
+    - image: 'k8s.gcr.io/kustomize/kustomize:v3.8.7'
+      name: update-digest
+      resources: {}
+      script: |
+        cd $(params.WORKING_DIR)
+        /app/kustomize edit set image $(params.NEW_IMAGE)
+        echo "##########################"
+        echo "### kustomization.yaml ###"
+        echo "##########################"
+        cat kustomization.yaml
+      workingDir: $(workspaces.output.path)
+  workspaces:
+    - description: The workspace with the manifest files
+      name: output
