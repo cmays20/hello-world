@@ -23,9 +23,6 @@ spec:
     - default: 'quay.io/cmays20/hello-world'
       name: IMAGE_NAME
       type: string
-    - default: 'latest'
-      name: APP_IMAGE_TAG
-      type: string
     - default: .
       name: PATH_CONTEXT
       type: string
@@ -79,7 +76,7 @@ spec:
     - name: build-image
       params:
         - name: IMAGE
-          value: $(params.IMAGE_NAME):$(params.APP_IMAGE_TAG)
+          value: $(params.IMAGE_NAME):$(params.GIT_REVISION)
         - name: CONTEXT
           value: $(params.PATH_CONTEXT)
       runAfter:
@@ -109,7 +106,7 @@ spec:
         - name: WORKING_DIR
           value: $(params.MANIFEST_WORKING_DIR)
         - name: NEW_IMAGE
-          value: $(params.IMAGE_NAME):$(params.APP_IMAGE_TAG)
+          value: $(params.IMAGE_NAME):$(params.GIT_REVISION)
       taskRef:
         kind: Task
         name: kustomize-update-image
