@@ -1,0 +1,95 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: hello-world-app
+spec:
+  namespaceSelector: {}
+  resources: {}
+  serviceAccountName: pipeline
+  triggers:
+    - bindings:
+        - kind: ClusterTriggerBinding
+          ref: gitlab-push
+      interceptors:
+        - name: only-master-branch
+          params:
+            - name: filter
+              value: body.ref == 'refs/heads/master'
+          ref:
+            kind: ClusterInterceptor
+            name: cel
+      name: hello-world-app-trig
+      template:
+        ref: hello-world-app
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: hello-world-app
+  namespace: hello-world
+spec:
+  params:
+    - description: The git repository url
+      name: git-repo-url
+    - default: pipelines-1.5
+      description: The git revision
+      name: git-revision
+    - description: The name of the deployment to be created / patched
+      name: git-repo-name
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: build-deploy-$(tt.params.git-repo-name)-
+      spec:
+        serviceAccountName: pipeline
+        params:
+          - name: APP_NAME
+            value: $(tt.params.git-repo-name)
+          - name: GIT_REPO
+            value: $(tt.params.git-repo-url)
+          - name: GIT_REVISION
+            value: $(tt.params.git-revision)
+          - name: IMAGE_NAME
+            value: >-
+              quay.io/cmays20/$(tt.params.git-repo-name)
+          - name: PATH_CONTEXT
+            value: .
+          - name: VERSION
+            value: openjdk-11-el7
+          - name: MAVEN_IMAGE
+            value: 'maven:3-openjdk-11-slim'
+          - name: MANIFEST_WORKING_DIR
+            value: environments/dev
+        pipelineRef:
+          name: hello-world
+        timeout: 1h0m0s
+        workspaces:
+          - name: workspace
+            persistentVolumeClaim:
+              claimName: hello-world-workspace
+          - name: maven-repo
+            persistentVolumeClaim:
+              claimName: hello-world-maven
+          - emptyDir: {}
+            name: maven-settings
+          - name: manifest-workspace
+            persistentVolumeClaim:
+              claimName: hello-world-manifest-workspace
+          - name: git-config
+            secret:
+              secretName: github-basic-auth-secret
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: el-hello-world-app
+  namespace: hello-world
+spec:
+  to:
+    kind: Service
+    name: el-hello-world-app
+    weight: 100
+  port:
+    targetPort: http-listener
+  wildcardPolicy: None

@@ -1,0 +1,86 @@
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: hello-world-test-app
+spec:
+  namespaceSelector: {}
+  resources: {}
+  serviceAccountName: pipeline
+  triggers:
+    - bindings:
+        - kind: ClusterTriggerBinding
+          ref: github-mergereq
+      interceptors:
+        - name: only when PRs are opened
+          params:
+            - name: filter
+              value: 'body.action in [''opened'', ''synchronize'', ''reopened'']'
+          ref:
+            kind: ClusterInterceptor
+            name: cel
+      name: hello-world-test-app-trig
+      template:
+        ref: hello-world-test-app
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: hello-world-test-app
+  namespace: hello-world
+spec:
+  params:
+    - description: The git repository url
+      name: git-repo-url
+    - default: pipelines-1.5
+      description: The git revision
+      name: mergereq-sha
+    - description: The name of the deployment to be created / patched
+      name: mergereq-repo-name
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: test-build-
+      spec:
+        serviceAccountName: pipeline
+        params:
+          - name: GIT_REPO
+            value: $(tt.params.git-repo-url)
+          - name: GIT_REVISION
+            value: $(tt.params.mergereq-sha)
+          - name: MAVEN_IMAGE
+            value: 'maven:3-openjdk-11-slim'
+          - name: REPO_FULL_NAME
+            value: $(tt.params.mergereq-repo-name)
+          - name: SHA
+            value: $(tt.params.mergereq-sha)
+          - name: GITLAB_HOST_URL
+            value: 'gitlab.mays-demo.com'
+        pipelineRef:
+          name: hello-world-test
+        timeout: 1h0m0s
+        workspaces:
+          - name: workspace
+            persistentVolumeClaim:
+              claimName: hello-world-workspace
+          - name: maven-repo
+            persistentVolumeClaim:
+              claimName: hello-world-maven
+          - emptyDir: {}
+            name: maven-settings
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: el-hello-world-test-app
+  namespace: hello-world
+spec:
+  to:
+    kind: Service
+    name: el-hello-world-test-app
+    weight: 100
+  port:
+    targetPort: http-listener
+  wildcardPolicy: None
+

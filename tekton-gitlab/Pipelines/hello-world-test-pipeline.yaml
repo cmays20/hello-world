@@ -1,0 +1,142 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hello-world-test
+spec:
+  params:
+    - default: 'https://github.com/cmays20/hello-world'
+      name: GIT_REPO
+      type: string
+    - default: master
+      name: GIT_REVISION
+      type: string
+    - default: 'maven:3-openjdk-11-slim'
+      name: MAVEN_IMAGE
+      type: string
+    - name: REPO_FULL_NAME
+      type: string
+    - name: SHA
+      type: string
+    - name: GITLAB_HOST_URL
+      type: string
+  tasks:
+    - name: get-route-to-console
+      params:
+        - name: SCRIPT
+          value: "oc get route console -n openshift-console --template='{{ .spec.host }}'"
+      taskRef:
+        kind: Task
+        name: oc-with-results
+    - name: gitlab-set-status-pending
+      params:
+        - name: GITLAB_HOST_URL
+          value: $(params.GITLAB_HOST_URL)
+        - name: REPO_FULL_NAME
+          value: $(params.REPO_FULL_NAME)
+        - name: SHA
+          value: $(params.SHA)
+        - name: DESCRIPTION
+          value: Build has started
+        - name: STATE
+          value: pending
+        - name: TARGET_URL
+          value: >-
+            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+      taskRef:
+        kind: Task
+        name: gitlab-set-status
+      when:
+        - input: $(params.SHA)
+          operator: notin
+          values:
+            - TEST
+      runAfter:
+        - get-route-to-console
+    - name: fetch-repository
+      params:
+        - name: url
+          value: $(params.GIT_REPO)
+        - name: revision
+          value: $(params.GIT_REVISION)
+        - name: deleteExisting
+          value: 'true'
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: workspace
+    - name: maven-build
+      params:
+        - name: MAVEN_IMAGE
+          value: $(params.MAVEN_IMAGE)
+        - name: GOALS
+          value:
+            - test
+      runAfter:
+        - fetch-repository
+      taskRef:
+        kind: Task
+        name: maven-with-cache
+      workspaces:
+        - name: source
+          workspace: workspace
+        - name: maven-repo
+          workspace: maven-repo
+        - name: maven-settings
+          workspace: maven-settings
+  finally:
+    - name: report-results-error
+      params:
+        - name: REPO_FULL_NAME
+          value: $(params.REPO_FULL_NAME)
+        - name: SHA
+          value: $(params.SHA)
+        - name: DESCRIPTION
+          value: Build has started
+        - name: STATE
+          value: error
+        - name: TARGET_URL
+          value: >-
+            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+      taskRef:
+        kind: Task
+        name: github-set-status
+      when:
+        - input: $(tasks.maven-build.status)
+          operator: in
+          values:
+            - Failed
+        - input: $(params.SHA)
+          operator: notin
+          values:
+            - TEST
+    - name: report-results-success
+      params:
+        - name: REPO_FULL_NAME
+          value: $(params.REPO_FULL_NAME)
+        - name: SHA
+          value: $(params.SHA)
+        - name: DESCRIPTION
+          value: Build has started
+        - name: STATE
+          value: success
+        - name: TARGET_URL
+          value: >-
+            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+      taskRef:
+        kind: Task
+        name: github-set-status
+      when:
+        - input: $(tasks.maven-build.status)
+          operator: in
+          values:
+            - Succeeded
+        - input: $(params.SHA)
+          operator: notin
+          values:
+            - TEST
+  workspaces:
+    - name: workspace
+    - name: maven-repo
+    - name: maven-settings
