@@ -10,12 +10,12 @@ spec:
   triggers:
     - bindings:
         - kind: ClusterTriggerBinding
-          ref: github-mergereq
+          ref: gitlab-mergereq
       interceptors:
-        - name: only when PRs are opened
+        - name: only when MRs are opened
           params:
             - name: filter
-              value: 'body.action in [''opened'', ''synchronize'', ''reopened'']'
+              value: 'body.state in [''opened'']'
           ref:
             kind: ClusterInterceptor
             name: cel

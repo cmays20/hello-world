@@ -38,8 +38,10 @@ spec:
       type: string
     - name: GIT_USER
       type: string
+      default: 'cmays20'
     - name: GIT_USER_EMAIL
       type: string
+      default: 'cmays@outlook.com'
   tasks:
     - name: fetch-repository
       params:

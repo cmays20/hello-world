@@ -101,7 +101,7 @@ spec:
             https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
-        name: github-set-status
+        name: gitlab-set-status
       when:
         - input: $(tasks.maven-build.status)
           operator: in
@@ -126,7 +126,7 @@ spec:
             https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
         kind: Task
-        name: github-set-status
+        name: gitlab-set-status
       when:
         - input: $(tasks.maven-build.status)
           operator: in
