@@ -27,7 +27,6 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: hello-world-test-app
-  namespace: hello-world
 spec:
   params:
     - description: The git repository url
@@ -74,7 +73,6 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: el-hello-world-test-app
-  namespace: hello-world
 spec:
   to:
     kind: Service
