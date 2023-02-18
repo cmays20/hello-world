@@ -15,7 +15,7 @@ spec:
         - name: only when MRs are opened
           params:
             - name: filter
-              value: 'body.state in [''opened'']'
+              value: 'body.object_attributes.state in [''opened'']'
           ref:
             kind: ClusterInterceptor
             name: cel
