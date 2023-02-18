@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: dev-hello-world
-  namespace: openshift-gitops
+  namespace: argocd
 spec:
   destination:
     namespace: hello-world-dev

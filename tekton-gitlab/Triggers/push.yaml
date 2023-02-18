@@ -60,6 +60,8 @@ spec:
             value: 'maven:3-openjdk-11-slim'
           - name: MANIFEST_WORKING_DIR
             value: environments/dev
+          - name: MANIFEST_GIT_REPO
+            value: https://gitlab.mays-demo.com/red-hat/hello-world-deploy.git
         pipelineRef:
           name: hello-world
         timeout: 1h0m0s

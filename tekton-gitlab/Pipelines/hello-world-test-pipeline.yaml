@@ -85,6 +85,26 @@ spec:
           workspace: maven-repo
         - name: maven-settings
           workspace: maven-settings
+    - name: maven-sonar
+      params:
+        - name: MAVEN_IMAGE
+          value: $(params.MAVEN_IMAGE)
+        - name: GOALS
+          value:
+            - verify
+            - sonar:sonar
+      runAfter:
+        - maven-build
+      taskRef:
+        kind: Task
+        name: maven-with-cache
+      workspaces:
+        - name: source
+          workspace: workspace
+        - name: maven-repo
+          workspace: maven-repo
+        - name: maven-settings
+          workspace: maven-settings
   finally:
     - name: report-results-error
       params:
