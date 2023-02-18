@@ -68,6 +68,9 @@ spec:
               claimName: hello-world-maven
           - emptyDir: {}
             name: maven-settings
+          - name: git-config
+            secret:
+              secretName: github-basic-auth-secret
 ---
 kind: Route
 apiVersion: route.openshift.io/v1
