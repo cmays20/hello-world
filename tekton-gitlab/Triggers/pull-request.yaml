@@ -51,7 +51,7 @@ spec:
           - name: MAVEN_IMAGE
             value: 'maven:3-openjdk-11-slim'
           - name: REPO_FULL_NAME
-            value: $(tt.params.mergereq-repo-name)
+            value: red-hat/$(tt.params.mergereq-repo-name)
           - name: SHA
             value: $(tt.params.mergereq-sha)
           - name: GITLAB_HOST_URL
