@@ -59,6 +59,8 @@ spec:
       workspaces:
         - name: output
           workspace: workspace
+        - name: basic-auth
+          workspace: git-config
     - name: maven-build
       params:
         - name: MAVEN_IMAGE
@@ -106,6 +108,8 @@ spec:
       workspaces:
         - name: output
           workspace: manifest-workspace
+        - name: basic-auth
+          workspace: git-config
     - name: manifest-update-image
       params:
         - name: WORKING_DIR
