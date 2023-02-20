@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: prod-hello-world
-  namespace: openshift-gitops
+  namespace: argocd
 spec:
   destination:
     namespace: hello-world
@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     path: environments/prod
-    repoURL: 'https://github.com/cmays20/hello-world-deploy.git'
+    repoURL: 'https://gitlab.mays-demo.com/red-hat/hello-world-deploy.git'
     targetRevision: HEAD
   syncPolicy:
     automated:
