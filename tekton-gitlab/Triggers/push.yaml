@@ -51,7 +51,7 @@ spec:
             value: $(tt.params.git-revision)
           - name: IMAGE_NAME
             value: >-
-              harbor.mays-demo.com/cmays20/$(tt.params.git-repo-name)
+              harbor.mays-demo.com/redhat/$(tt.params.git-repo-name)
           - name: PATH_CONTEXT
             value: .
           - name: VERSION

@@ -3,13 +3,12 @@ This app is for demoing OpenShift Pipelines
 
 # Prerequisites
 
+- Have an OpenShift (4.12+) cluster up and running
+- Install Big Bang on the cluster
+
 ## Add Pipelines Operator
 
-## Add GitOps Operator
-
-## Turn on User Monitoring
-
-Apply the yaml in the monitoring folder
+- Install the OpenShift Pipelines Operator from the Operator Catalog
 
 # Setup using ArgoCD
 
@@ -17,11 +16,10 @@ Apply the yaml in the monitoring folder
 
 ```
 oc create ns hello-world
-oc label namespace hello-world argocd.argoproj.io/managed-by=openshift-gitops
 oc policy add-role-to-user monitoring-edit system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n hello-world
 oc create ns hello-world-dev
-oc label namespace hello-world-dev argocd.argoproj.io/managed-by=openshift-gitops
 oc policy add-role-to-user monitoring-edit system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n hello-world-dev
+oc create ns hello-world-pipeline
 ```
 
 
