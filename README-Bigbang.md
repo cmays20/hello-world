@@ -4,7 +4,6 @@ This app is for demoing OpenShift Pipelines
 # Prerequisites
 
 - Have an OpenShift (4.12+) cluster up and running
-- Install Big Bang on the cluster
 
 ## Add Operators
 
