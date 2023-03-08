@@ -4,6 +4,13 @@ This app is for demoing OpenShift Pipelines
 # Prerequisites
 
 - Have an OpenShift (4.12+) cluster up and running
+- Create a file in your home directory called NetworkAttachmentDefinition.yaml with these contents:
+  ```yaml
+  apiVersion: "k8s.cni.cncf.io/v1"
+  kind: NetworkAttachmentDefinition
+  metadata:
+    name: istio-cni
+  ```
 
 ## Add Operators
 
@@ -35,6 +42,9 @@ helm upgrade --install bigbang $HOME/bigbang/chart \
   --values $HOME/ib_creds.yaml \
   --values $HOME/demo_values.yaml \
   --namespace=bigbang --create-namespace
+  
+oc apply -f ~/NetworkAttachmentDefinition.yaml -n harbor
+oc apply -f ~/NetworkAttachmentDefinition.yaml -n gitlab
 ```
 
 Add NetworkPolicy for Harbor and Gitlab.  This is so the router can validate the certificates it is going to request using
