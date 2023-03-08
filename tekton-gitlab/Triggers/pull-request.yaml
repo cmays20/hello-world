@@ -66,11 +66,12 @@ spec:
           - name: maven-repo
             persistentVolumeClaim:
               claimName: hello-world-maven
-          - emptyDir: {}
+          - configMap:
+              name: maven-settings-cm
             name: maven-settings
           - name: git-config
             secret:
-              secretName: github-basic-auth-secret
+              secretName: git-basic-auth-secret
 ---
 kind: Route
 apiVersion: route.openshift.io/v1

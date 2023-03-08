@@ -110,14 +110,16 @@ spec:
   finally:
     - name: report-results-error
       params:
+        - name: GITLAB_HOST_URL
+          value: $(params.GITLAB_HOST_URL)
         - name: REPO_FULL_NAME
           value: $(params.REPO_FULL_NAME)
         - name: SHA
           value: $(params.SHA)
         - name: DESCRIPTION
-          value: Build has started
+          value: Build has error
         - name: STATE
-          value: error
+          value: failed
         - name: TARGET_URL
           value: >-
             https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
@@ -125,7 +127,7 @@ spec:
         kind: Task
         name: gitlab-set-status
       when:
-        - input: $(tasks.maven-build.status)
+        - input: $(tasks.maven-sonar.status)
           operator: in
           values:
             - Failed
@@ -135,12 +137,14 @@ spec:
             - TEST
     - name: report-results-success
       params:
+        - name: GITLAB_HOST_URL
+          value: $(params.GITLAB_HOST_URL)
         - name: REPO_FULL_NAME
           value: $(params.REPO_FULL_NAME)
         - name: SHA
           value: $(params.SHA)
         - name: DESCRIPTION
-          value: Build has started
+          value: Build Success
         - name: STATE
           value: success
         - name: TARGET_URL
@@ -150,7 +154,7 @@ spec:
         kind: Task
         name: gitlab-set-status
       when:
-        - input: $(tasks.maven-build.status)
+        - input: $(tasks.maven-sonar.status)
           operator: in
           values:
             - Succeeded
