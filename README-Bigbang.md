@@ -17,6 +17,7 @@ This app is for demoing OpenShift Pipelines
 - Install Flux Operator
 - Install OpenShift Pipelines Operator
 - Install cert-manager Operator for Red Hat OpenShift
+  - Create a cluster issuer for your environment
 
 ## Add External-DNS (Optional)
 
@@ -156,6 +157,8 @@ Login to Sonarqube, by default admin/admin are the creds.  It will ask you to up
 1. Create the hello-world-pipeline namespace `oc create ns hello-world-pipeline`
 2. Give the pipeline user access to the oc api 
    `oc adm policy add-cluster-role-to-user cluster-reader -z pipeline -n hello-world-pipeline`
+3. Add the gitlab token for the gitlab commit status update task
+   `oc create secret generic gitlab-api-secret --from-literal=token=<GITLAB_ACCESS_TOKEN> -n hello-world-pipeline`
 3. Add git credentials as a secret
 
     ```yaml
@@ -188,8 +191,12 @@ Login to Sonarqube, by default admin/admin are the creds.  It will ask you to up
 8. Add Harbor Secret
    1. Create secret and link to service account
       ``` 
-      oc create secret docker-registry harbor-registry --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword>
-      oc secrets link pipeline harbor-registry --for=pull,mount
+      oc create secret docker-registry harbor-registry \
+        --docker-server=<your-registry-server> \
+        --docker-username=<your-name> \ 
+        --docker-password=<your-pword> \
+        -n hello-world-pipeline
+      oc secrets link pipeline harbor-registry --for=pull,mount -n hello-world-pipeline
       ```
 9. Add maven-settings.xml as a Config Map
    ```xml
@@ -200,27 +207,27 @@ Login to Sonarqube, by default admin/admin are the creds.  It will ask you to up
      namespace: hello-world-pipeline
    data:
      settings.xml: |-
-     <settings>
-       <pluginGroups>
-         <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
-       </pluginGroups>
-       <profiles>
-         <profile>
-           <id>sonar</id>
-           <activation>
-             <activeByDefault>true</activeByDefault>
-           </activation>
-           <properties>
-             <sonar.host.url>
-               #URL to sonarqube - use the internet path to avoid istio issues
-             </sonar.host.url>
-             <sonar.login>
-               #FILL IN WITH YOUR TOKEN FROM THE SONAR GUI
-             </sonar.login>
-           </properties>
-         </profile>
-       </profiles>
-     </settings>
+       <settings>
+         <pluginGroups>
+           <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+         </pluginGroups>
+         <profiles>
+           <profile>
+             <id>sonar</id>
+             <activation>
+               <activeByDefault>true</activeByDefault>
+             </activation>
+             <properties>
+               <sonar.host.url>
+                 #URL to sonarqube - use the internet path to avoid istio issues
+               </sonar.host.url>
+               <sonar.login>
+                 #FILL IN WITH YOUR TOKEN FROM THE SONAR GUI
+               </sonar.login>
+             </properties>
+           </profile>
+         </profiles>
+       </settings>
    binaryData: {}
    immutable: false
    ```
@@ -232,11 +239,16 @@ oc create ns hello-world
 oc label namespaces hello-world istio-injection=enabled
 oc adm policy add-scc-to-group nonroot-v2 system:serviceaccounts:hello-world
 oc apply -f ~/NetworkAttachmentDefinition.yaml -n hello-world
+oc create secret docker-registry harbor-registry --docker-server=$HARBOR_URL --docker-username=$HARBOR_USER --docker-password=$HARBOR_PASS -n hello-world
+oc secrets link default harbor-registry --for=pull,mount -n hello-world
 oc create ns hello-world-dev
 oc label namespaces hello-world-dev istio-injection=enabled
 oc adm policy add-scc-to-group nonroot-v2 system:serviceaccounts:hello-world-dev
 oc apply -f ~/NetworkAttachmentDefinition.yaml -n hello-world-dev
+oc create secret docker-registry harbor-registry --docker-server=$HARBOR_URL --docker-username=$HARBOR_USER --docker-password=$HARBOR_PASS -n hello-world-dev 
+oc secrets link default harbor-registry --for=pull,mount -n hello-world-dev
 ```
+After running the above, please add the app and app-dev yamls from the argo directory
 
 ## Setup Grafana
 
