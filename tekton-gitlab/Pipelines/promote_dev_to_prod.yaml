@@ -8,10 +8,10 @@ metadata:
   name: promote-dev-to-prod
 spec:
   params:
-    - default: 'quay.io/cmays20/hello-world'
+    - default: 'harbor.mays-demo.com/redhat/hello-world'
       name: IMAGE_NAME
       type: string
-    - default: 'https://github.com/cmays20/hello-world-deploy'
+    - default: 'https://gitlab.mays-demo.com/red-hat/hello-world-deploy'
       name: MANIFEST_GIT_REPO
       type: string
     - name: PREVIOUS_WORKING_DIR
@@ -35,6 +35,8 @@ spec:
       workspaces:
         - name: output
           workspace: manifest-workspace
+        - name: basic-auth
+            workspace: git-config
     - name: get-git-revision
       params: 
         - name: WORKING_DIR
