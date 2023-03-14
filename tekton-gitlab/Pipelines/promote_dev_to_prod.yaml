@@ -36,7 +36,7 @@ spec:
         - name: output
           workspace: manifest-workspace
         - name: basic-auth
-            workspace: git-config
+          workspace: git-config
     - name: get-git-revision
       params: 
         - name: WORKING_DIR
