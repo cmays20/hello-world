@@ -1,0 +1,15 @@
+---
+- name: Add cert-manager-operator namespace
+  kubernetes.core.k8s:
+    state: present
+    src: cert-manager-namespace.yaml
+
+- name: Add cert-manager-operator-group
+  kubernetes.core.k8s:
+    state: present
+    src: cert-manager-operator-group.yaml
+
+- name: Add cert-manager subscription
+  kubernetes.core.k8s:
+    state: present
+    src: cert-manager-subscription.yaml

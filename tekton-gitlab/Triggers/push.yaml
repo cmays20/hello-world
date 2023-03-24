@@ -54,10 +54,8 @@ spec:
               harbor.mays-demo.com/redhat/$(tt.params.git-repo-name)
           - name: PATH_CONTEXT
             value: .
-          - name: VERSION
-            value: openjdk-11-el7
           - name: MAVEN_IMAGE
-            value: 'maven:3-openjdk-11-slim'
+            value: 'maven:3-openjdk-17-slim'
           - name: MANIFEST_WORKING_DIR
             value: environments/dev
           - name: MANIFEST_GIT_REPO

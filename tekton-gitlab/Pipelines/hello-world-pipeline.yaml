@@ -25,9 +25,6 @@ spec:
     - default: .
       name: PATH_CONTEXT
       type: string
-    - default: openjdk-11-el7
-      name: VERSION
-      type: string
     - default: 'maven:3-openjdk-11-slim'
       name: MAVEN_IMAGE
       type: string

@@ -1,0 +1,2 @@
+dependencies:
+  - kubernetes.core.k8s

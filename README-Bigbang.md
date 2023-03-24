@@ -71,6 +71,25 @@ spec:
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
+  name: egress-trivy
+  namespace: harbor
+spec:
+  podSelector:
+    matchLabels:
+      component: trivy
+  egress:
+    - ports:
+        - protocol: TCP
+          port: 443
+      to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+  policyTypes:
+    - Egress
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
   name: ingress-router
   namespace: gitlab
 spec:
@@ -159,7 +178,7 @@ Login to Sonarqube, by default admin/admin are the creds.  It will ask you to up
    `oc adm policy add-cluster-role-to-user cluster-reader -z pipeline -n hello-world-pipeline`
 3. Add the gitlab token for the gitlab commit status update task
    `oc create secret generic gitlab-api-secret --from-literal=token=<GITLAB_ACCESS_TOKEN> -n hello-world-pipeline`
-3. Add git credentials as a secret
+4. Add git credentials as a secret
 
     ```yaml
     kind: Secret
@@ -175,20 +194,20 @@ Login to Sonarqube, by default admin/admin are the creds.  It will ask you to up
       .git-credentials: |
         https://<user>:<pass>@<hostname>
     ```
-4. Apply the tekton-gitlab.yaml in the argo folder to the argocd namespace
-5. Login to ArgoCD to check on its status
+5. Apply the tekton-gitlab.yaml in the argo folder to the argocd namespace
+6. Login to ArgoCD to check on its status
    ```shell
    oc get secret argocd-initial-admin-secret -n argocd --template={{.data.password}} | base64 -d
    ```
-6. The PVCs will spin in ArgoCD until the pipelines are executed
-7. Setup the webhooks in Gitlab
+7. The PVCs will spin in ArgoCD until the pipelines are executed
+8. Setup the webhooks in Gitlab
    1. Get the listener URLs: `oc get route -n hello-world-pipeline`
    2. In Gitlab, navigate to the hello-world project -> Settings -> Webhooks
    3. Add the non-test URL, click on push events, set the wildcard pattern to master
    4. Disable SSL verification then hit Add Webhook
    5. Now add the test webhook URL, click on Merge Request Events
    6. Disable SSL verification then hit Add Webhook
-8. Add Harbor Secret
+9. Add Harbor Secret
    1. Create secret and link to service account
       ``` 
       oc create secret docker-registry harbor-registry \
@@ -198,39 +217,42 @@ Login to Sonarqube, by default admin/admin are the creds.  It will ask you to up
         -n hello-world-pipeline
       oc secrets link pipeline harbor-registry --for=pull,mount -n hello-world-pipeline
       ```
-9. Add maven-settings.xml as a Config Map
-   ```xml
-   apiVersion: v1
-   kind: ConfigMap
-   metadata:
-     name: maven-settings-cm
-     namespace: hello-world-pipeline
-   data:
-     settings.xml: |-
-       <settings>
-         <pluginGroups>
-           <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
-         </pluginGroups>
-         <profiles>
-           <profile>
-             <id>sonar</id>
-             <activation>
-               <activeByDefault>true</activeByDefault>
-             </activation>
-             <properties>
-               <sonar.host.url>
-                 #URL to sonarqube - use the internet path to avoid istio issues
-               </sonar.host.url>
-               <sonar.login>
-                 #FILL IN WITH YOUR TOKEN FROM THE SONAR GUI
-               </sonar.login>
-             </properties>
-           </profile>
-         </profiles>
-       </settings>
-   binaryData: {}
-   immutable: false
-   ```
+10. Add maven-settings.xml as a Config Map
+    ```xml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: maven-settings-cm
+      namespace: hello-world-pipeline
+    data:
+      settings.xml: |-
+        <settings>
+          <pluginGroups>
+            <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+          </pluginGroups>
+          <profiles>
+            <profile>
+              <id>sonar</id>
+              <activation>
+                <activeByDefault>true</activeByDefault>
+              </activation>
+              <properties>
+                <sonar.host.url>
+                  #URL to sonarqube - use the internet path to avoid istio issues
+                </sonar.host.url>
+                <sonar.login>
+                  #FILL IN WITH YOUR TOKEN FROM THE SONAR GUI
+                </sonar.login>
+              </properties>
+            </profile>
+          </profiles>
+        </settings>
+    binaryData: {}
+    immutable: false
+    ```
+
+11. Setup Stackrox Pipeline Integration
+    1. Create an API token in the ACS GUI under Integrations.
 
 ## Kick off Dev and Prod hello-world apps
 

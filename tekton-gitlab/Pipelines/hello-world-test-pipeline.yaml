@@ -10,7 +10,10 @@ spec:
     - default: master
       name: GIT_REVISION
       type: string
-    - default: 'maven:3-openjdk-11-slim'
+    - default: .
+      name: PATH_CONTEXT
+      type: string
+    - default: 'maven:3-openjdk-17-slim'
       name: MAVEN_IMAGE
       type: string
     - name: REPO_FULL_NAME
@@ -19,6 +22,9 @@ spec:
       type: string
     - name: GITLAB_HOST_URL
       type: string
+    - name: IMAGE_NAME
+      type: string
+      default: harbor.mays-demo.com/redhat/hello-world:test-latest
   tasks:
     - name: get-route-to-console
       params:
@@ -87,6 +93,42 @@ spec:
           workspace: maven-repo
         - name: maven-settings
           workspace: maven-settings
+    - name: build-image
+      params:
+        - name: IMAGE
+          value: $(params.IMAGE_NAME)
+        - name: CONTEXT
+          value: $(params.PATH_CONTEXT)
+      runAfter:
+        - maven-build
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: workspace
+    - name: image-scan
+      taskRef:
+        name: rhacs-image-scan
+        kind: ClusterTask
+      params:
+        - name: image
+          value: $(params.IMAGE_NAME)
+        - name: insecure-skip-tls-verify
+          value: 'true'
+      runAfter:
+        - build-image
+    - name: image-check
+      taskRef:
+        name: rhacs-image-check
+        kind: ClusterTask
+      params:
+        - name: image
+          value: $(params.IMAGE_NAME)
+        - name: insecure-skip-tls-verify
+          value: 'true'
+      runAfter:
+        - image-scan
     - name: maven-sonar
       params:
         - name: MAVEN_IMAGE
@@ -127,7 +169,7 @@ spec:
         kind: Task
         name: gitlab-set-status
       when:
-        - input: $(tasks.maven-sonar.status)
+        - input: $(tasks.status)
           operator: in
           values:
             - Failed
@@ -154,7 +196,7 @@ spec:
         kind: Task
         name: gitlab-set-status
       when:
-        - input: $(tasks.maven-sonar.status)
+        - input: $(tasks.status)
           operator: in
           values:
             - Succeeded
