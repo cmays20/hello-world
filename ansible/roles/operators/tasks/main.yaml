@@ -13,3 +13,23 @@
   kubernetes.core.k8s:
     state: present
     src: cert-manager-subscription.yaml
+
+- name: Add flux-operator namespace
+  kubernetes.core.k8s:
+    state: present
+    src: flux-namespace.yaml
+
+- name: Add flux-operator-group
+  kubernetes.core.k8s:
+    state: present
+    src: flux-operator-group.yaml
+
+- name: Add cert-manager subscription
+  kubernetes.core.k8s:
+    state: present
+    src: flux-subscription.yaml
+
+- name: Add pipelines subscription
+  kubernetes.core.k8s:
+    state: present
+    src: pipelines-subscription.yaml

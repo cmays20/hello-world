@@ -1,4 +1,6 @@
 - name: Setup hello-world ci/cd demo
   hosts: localhost
+  collections:
+    - kubernetes.core
   roles:
     - operators
