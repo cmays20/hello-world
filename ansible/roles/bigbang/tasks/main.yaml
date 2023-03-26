@@ -14,11 +14,11 @@
     name: bigbang
     release_namespace: bigbang
     create_namespace: true
-    chart_ref: {{ ansible_env.HOME }}/bigbang/chart
+    chart_ref: ""{{ ansible_env.HOME }}/bigbang/chart"
     values_files:
-      - {{ ansible_env.HOME }}/ingress-certs.yaml
-      - {{ ansible_env.HOME }}/ib_creds.yaml
-      - {{ ansible_env.HOME }}/demo_values.yaml
+      - "{{ ansible_env.HOME }}/ingress-certs.yaml"
+      - "{{ ansible_env.HOME }}/ib_creds.yaml"
+      - "{{ ansible_env.HOME }}/demo_values.yaml"
 
 - name: Add harbor NetworkAttachmentDefinition
   kubernetes.core.k8s:
