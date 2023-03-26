@@ -1,0 +1,15 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: ingress-router
+  namespace: harbor
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+        - podSelector: {}
+          namespaceSelector:
+            matchLabels:
+              name: openshift-ingress
+  policyTypes:
+    - Ingress

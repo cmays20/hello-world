@@ -31,3 +31,13 @@
     state: present
     src: network-attachment-definition.yaml
     namespace: gitlab
+
+- name: Add harbor network policy
+  kubernetes.core.k8s:
+    state: present
+    src: harbor-network-policy.yaml
+
+- name: Add gitlab network policy
+  kubernetes.core.k8s:
+    state: present
+    src: gitlab-network-policy.yaml
