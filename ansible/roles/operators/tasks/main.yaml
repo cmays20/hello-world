@@ -33,3 +33,10 @@
   kubernetes.core.k8s:
     state: present
     src: pipelines-subscription.yaml
+
+- name: Add Cert Manager Cluster Issuer
+  kubernetes.core.k8s:
+    state: present
+    template:
+      - path: cluster-issuer.yaml.j2
+        email: {{ cert_manager_email }}

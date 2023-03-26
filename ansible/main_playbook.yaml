@@ -1,5 +1,7 @@
 - name: Setup hello-world ci/cd demo
   hosts: localhost
+  var_files:
+    - vars.yaml
   collections:
     - kubernetes.core
   roles:
