@@ -1,0 +1,33 @@
+---
+- name: Add harbor scc
+  kubernetes.core.k8s:
+    state: present
+    src: harbor-scc.yaml
+
+- name: Add gitlab scc
+  kubernetes.core.k8s:
+    state: present
+    src: gitlab-scc.yaml
+
+- name: Deploy Big Bang
+  kubernetes.core.helm:
+    name: bigbang
+    release_namespace: bigbang
+    create_namespace: true
+    chart_ref: {{ ansible_env.HOME }}/bigbang/chart
+    values_files:
+      - {{ ansible_env.HOME }}/ingress-certs.yaml
+      - {{ ansible_env.HOME }}/ib_creds.yaml
+      - {{ ansible_env.HOME }}/demo_values.yaml
+
+- name: Add harbor NetworkAttachmentDefinition
+  kubernetes.core.k8s:
+    state: present
+    src: network-attachment-definition.yaml
+    namespace: harbor
+
+- name: Add gitlab NetworkAttachmentDefinition
+  kubernetes.core.k8s:
+    state: present
+    src: network-attachment-definition.yaml
+    namespace: gitlab
