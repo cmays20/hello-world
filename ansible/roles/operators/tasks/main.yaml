@@ -40,6 +40,11 @@
     template:
       - path: cluster-issuer.yaml.j2
 
+- name: Add external-dns namespace
+  kubernetes.core.k8s:
+    state: present
+    src: external-dns-namespace.yaml
+
 - name: Add External-DNS
   kubernetes.core.k8s:
     state: present
