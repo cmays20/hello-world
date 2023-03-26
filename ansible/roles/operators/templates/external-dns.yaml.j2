@@ -63,11 +63,7 @@ spec:
       - name: external-dns
         image: registry.k8s.io/external-dns/external-dns:v0.13.2
         args:
-        - --source=openshift-route # ingress is also possible
-        - --source=istio-virtualservice
-        - --txt-prefix=external-dns. # In case of multiple k8s cluster
-        - --openshift-router-name=default
-        {{ external_dns_config }}
+        {{ external_dns_config | indent(width=8, first=False) }}
         securityContext:
           allowPrivilegeEscalation: false
           runAsNonRoot: true
