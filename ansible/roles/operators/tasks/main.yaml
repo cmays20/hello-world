@@ -39,4 +39,3 @@
     state: present
     template:
       - path: cluster-issuer.yaml.j2
-        email: {{ cert_manager_email }}
