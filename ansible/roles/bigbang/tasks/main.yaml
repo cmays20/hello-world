@@ -103,14 +103,6 @@
   retries: 40
   delay: 20
 
-- name: Check if minio is available and returning status 200
-  uri:
-    url: "https://minio.{{ domain }}"
-  register: result
-  until: "result.status == 200"
-  retries: 40
-  delay: 20
-
 - name: Check if sonarqube is available and returning status 200
   uri:
     url: "https://sonarqube.{{ domain }}"
