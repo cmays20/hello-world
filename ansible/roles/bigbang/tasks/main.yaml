@@ -41,3 +41,104 @@
   kubernetes.core.k8s:
     state: present
     src: gitlab-network-policy.yaml
+
+- name: Wait 5 minutes for big bang to initialize
+  ansible.builtin.wait_for:
+    timeout: 300
+  delegate_to: localhost
+
+- name: Check if prometheus is available and returning status 200
+  uri:
+    url: "https://prometheus.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if alertmanager is available and returning status 200
+  uri:
+    url: "https://alertmanager.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if argocd is available and returning status 200
+  uri:
+    url: "https://argocd.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if gitlab is available and returning status 200
+  uri:
+    url: "https://gitlab.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if registry is available and returning status 200
+  uri:
+    url: "https://registry.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if grafana is available and returning status 200
+  uri:
+    url: "https://grafana.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if kibana is available and returning status 200
+  uri:
+    url: "https://kibana.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if minio is available and returning status 200
+  uri:
+    url: "https://minio.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if sonarqube is available and returning status 200
+  uri:
+    url: "https://sonarqube.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if harbor is available and returning status 200
+  uri:
+    url: "https://harbor.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if jaeger is available and returning status 200
+  uri:
+    url: "https://tracing.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20
+
+- name: Check if kiali is available and returning status 200
+  uri:
+    url: "https://kiali.{{ domain }}"
+  register: result
+  until: "result.status == 200"
+  retries: 40
+  delay: 20

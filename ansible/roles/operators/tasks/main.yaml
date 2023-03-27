@@ -25,11 +25,27 @@
     state: present
     src: flux-operator-group.yaml
 
-- name: Add cert-manager subscription
+- name: Add flux subscription
   kubernetes.core.k8s:
     state: present
     src: flux-subscription.yaml
   register: flux
+
+- name: Add rhacs-operator namespace
+  kubernetes.core.k8s:
+    state: present
+    src: rhacs-operator-namespace.yaml
+
+- name: Add rhacs-operator-group
+  kubernetes.core.k8s:
+    state: present
+    src: rhacs-operator-group.yaml
+
+- name: Add rhacs operator subscription
+  kubernetes.core.k8s:
+    state: present
+    src: rhacs-subscription.yaml
+  register: rhacs
 
 - name: Add pipelines subscription
   kubernetes.core.k8s:
@@ -37,11 +53,11 @@
     src: pipelines-subscription.yaml
   register: pipelines
 
-- name: Wait 1 minute for operator install
+- name: Wait 2 minute for operator install
   ansible.builtin.wait_for:
-    timeout: 60
+    timeout: 120
   delegate_to: localhost
-  when: certmanager.changed or flux.changed or pipelines.changed
+  when: certmanager.changed or flux.changed or pipelines.changed or rhacs.changed
 
 - name: Add Cert Manager Cluster Issuer
   kubernetes.core.k8s:
@@ -59,3 +75,13 @@
     state: present
     template:
       - path: external-dns.yaml.j2
+
+- name: Add rhacs central
+  kubernetes.core.k8s:
+    state: present
+    src: rhacs-central.yaml
+
+- name: Add rhacs secured cluster
+  kubernetes.core.k8s:
+    state: present
+    src: rhacs-secured-cluster.yaml
