@@ -13,6 +13,7 @@
   kubernetes.core.k8s:
     state: present
     src: cert-manager-subscription.yaml
+  register: certmanager
 
 - name: Add flux-operator namespace
   kubernetes.core.k8s:
@@ -28,11 +29,19 @@
   kubernetes.core.k8s:
     state: present
     src: flux-subscription.yaml
+  register: flux
 
 - name: Add pipelines subscription
   kubernetes.core.k8s:
     state: present
     src: pipelines-subscription.yaml
+  register: pipelines
+
+- name: Wait 1 minute for operator install
+  ansible.builtin.wait_for:
+    timeout: 60
+  delegate_to: localhost
+  when: certmanager.changed or flux.changed or pipelines.changed
 
 - name: Add Cert Manager Cluster Issuer
   kubernetes.core.k8s:

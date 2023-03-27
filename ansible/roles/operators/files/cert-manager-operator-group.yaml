@@ -1,7 +1,7 @@
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
-  generateName: cert-manager-
+  name: cert-manager
   namespace: cert-manager-operator
 spec:
   targetNamespaces:
