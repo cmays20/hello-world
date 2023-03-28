@@ -1,5 +1,8 @@
 domain:
 cert_manager_email:
+#Choose the appropriate URL based on your activities
+cert_manager_url: https://acme-v02.api.letsencrypt.org/directory
+#cert_manager_url: https://acme-staging-v02.api.letsencrypt.org/directory
 external_dns_config: |-
   - --source=openshift-route # ingress is also possible
   - --source=istio-virtualservice

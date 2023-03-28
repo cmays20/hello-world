@@ -7,7 +7,7 @@ spec:
     email: {{ cert_manager_email }}
     privateKeySecretRef:
       name: letsencrypt-private-key
-    server: 'https://acme-v02.api.letsencrypt.org/directory'
+    server: {{ cert_manager_url }}
     solvers:
       - http01:
           ingress:
