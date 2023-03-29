@@ -52,98 +52,98 @@
 - name: Check if prometheus is available and returning status 200
   uri:
     url: "https://prometheus.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if alertmanager is available and returning status 200
   uri:
     url: "https://alertmanager.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if argocd is available and returning status 200
   uri:
     url: "https://argocd.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if gitlab is available and returning status 200
   uri:
     url: "https://gitlab.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if registry is available and returning status 200
   uri:
     url: "https://registry.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if grafana is available and returning status 200
   uri:
     url: "https://grafana.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if kibana is available and returning status 200
   uri:
     url: "https://kibana.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if sonarqube is available and returning status 200
   uri:
     url: "https://sonarqube.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if harbor is available and returning status 200
   uri:
     url: "https://harbor.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if jaeger is available and returning status 200
   uri:
     url: "https://tracing.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if kiali is available and returning status 200
   uri:
     url: "https://kiali.{{ domain }}"
+    validate_certs: "{{ validate_certs_during_checks }}"
   register: result
   until: "result.status == 200"
   retries: 40
   delay: 20
-  validate_certs: "{{ validate_certs_during_checks }}"
