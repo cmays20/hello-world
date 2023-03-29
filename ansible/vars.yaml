@@ -9,3 +9,8 @@ external_dns_config: |-
   - --txt-prefix=external-dns. # In case of multiple k8s cluster
   - --openshift-router-name=default
   #ADD your environments specifics here
+gitlab_endpoint:
+gitlab_full_username:
+gitlab_username:
+gitlab_password:
+gitlab_email:

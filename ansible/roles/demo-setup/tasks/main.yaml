@@ -1,0 +1,48 @@
+---
+- name: Fetch secret
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Secret
+    name: gitlab-gitlab-initial-root-password
+    namespace: gitlab
+  register: gitlab_password
+
+- name: GitLab Post | Obtain Access Token
+  uri:
+    url: "{{ gitlab_endpoint }}/oauth/token"
+    method: POST
+    validate_certs: no
+    status_code: 200
+    body_format: json
+    headers:
+      Content-Type: application/json
+    body: >
+      {
+      "grant_type": "password",
+      "username": "root",
+      "password": "{{ gitlab_password.resources[0].data.password | b64decode }}"
+      }
+  register: gitlab_access_token
+
+- name: Create Red Hat Group
+  community.general.gitlab_group:
+    api_url: "{{ gitlab_endpoint }}"
+    validate_certs: false
+    api_token: "{{ gitlab_access_token.json.access_token }}"
+    name: Red Hat
+    path: red-hat
+    state: present
+
+- name: Add user
+  community.general.gitlab_user:
+    api_url: "{{ gitlab_endpoint }}"
+    validate_certs: false
+    api_token: "{{ gitlab_access_token.json.access_token }}"
+    name: "{{ gitlab_full_username }}"
+    username: "{{ gitlab_username }}"
+    password: "{{ gitlab_password }}"
+    email: "{{ gitlab_email }}"
+    state: present
+    group: red-hat
+    isadmin: true
+    access_level: owner

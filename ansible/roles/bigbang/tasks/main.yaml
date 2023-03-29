@@ -19,6 +19,7 @@
       - "{{ ansible_env.HOME }}/ingress-certs.yaml"
       - "{{ ansible_env.HOME }}/ib_creds.yaml"
       - "{{ ansible_env.HOME }}/demo_values.yaml"
+  register: bigbang
 
 - name: Add harbor NetworkAttachmentDefinition
   kubernetes.core.k8s:
@@ -46,6 +47,7 @@
   ansible.builtin.wait_for:
     timeout: 300
   delegate_to: localhost
+  when: bigbang.changed
 
 - name: Check if prometheus is available and returning status 200
   uri:

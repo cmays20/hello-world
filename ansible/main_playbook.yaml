@@ -7,3 +7,4 @@
   roles:
     - operators
     - bigbang
+    - demo-setup
