@@ -1,4 +1,5 @@
 domain:
+validate_certs_during_checks: true
 cert_manager_email:
 #Choose the appropriate URL based on your activities
 cert_manager_url: https://acme-v02.api.letsencrypt.org/directory

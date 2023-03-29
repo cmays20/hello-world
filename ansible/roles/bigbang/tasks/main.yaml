@@ -56,6 +56,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if alertmanager is available and returning status 200
   uri:
@@ -64,6 +65,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if argocd is available and returning status 200
   uri:
@@ -72,6 +74,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if gitlab is available and returning status 200
   uri:
@@ -80,6 +83,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if registry is available and returning status 200
   uri:
@@ -88,6 +92,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if grafana is available and returning status 200
   uri:
@@ -96,6 +101,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if kibana is available and returning status 200
   uri:
@@ -104,6 +110,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if sonarqube is available and returning status 200
   uri:
@@ -112,6 +119,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if harbor is available and returning status 200
   uri:
@@ -120,6 +128,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if jaeger is available and returning status 200
   uri:
@@ -128,6 +137,7 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
 
 - name: Check if kiali is available and returning status 200
   uri:
@@ -136,3 +146,4 @@
   until: "result.status == 200"
   retries: 40
   delay: 20
+  validate_certs: "{{ validate_certs_during_checks }}"
