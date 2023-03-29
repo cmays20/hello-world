@@ -24,14 +24,14 @@
       }
   register: gitlab_access_token
 
-- name: Create Red Hat Group
-  community.general.gitlab_group:
-    api_url: "{{ gitlab_endpoint }}"
-    validate_certs: false
-    api_token: "{{ gitlab_access_token.json.access_token }}"
-    name: Red Hat
-    path: red-hat
-    state: present
+#- name: Create Red Hat Group
+#  community.general.gitlab_group:
+#    api_url: "{{ gitlab_endpoint }}"
+#    validate_certs: false
+#    api_token: "{{ gitlab_access_token.json.access_token }}"
+#    name: Red Hat
+#    path: red-hat
+#    state: present
 
 - name: Add user
   community.general.gitlab_user:
@@ -43,6 +43,6 @@
     password: "{{ gitlab_password }}"
     email: "{{ gitlab_email }}"
     state: present
-    group: red-hat
+#    group: red-hat
     isadmin: true
     access_level: owner
