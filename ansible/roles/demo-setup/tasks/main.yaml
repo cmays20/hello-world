@@ -5,7 +5,7 @@
     kind: Secret
     name: gitlab-gitlab-initial-root-password
     namespace: gitlab
-  register: gitlab_password
+  register: gitlab_initial_password
 
 - name: GitLab Post | Obtain Access Token
   uri:
@@ -20,7 +20,7 @@
       {
       "grant_type": "password",
       "username": "root",
-      "password": "{{ gitlab_password.resources[0].data.password | b64decode }}"
+      "password": "{{ gitlab_initial_password.resources[0].data.password | b64decode }}"
       }
   register: gitlab_access_token
 
