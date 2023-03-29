@@ -31,6 +31,8 @@
     api_oauth_token: "{{ gitlab_access_token.json.access_token }}"
     name: Red Hat
     path: red-hat
+    subgroup_creation_level: maintainer
+    project_creation_level: developer
     state: present
 
 - name: Add user
