@@ -48,3 +48,4 @@
     group: red-hat
     isadmin: true
     access_level: owner
+    confirm: false
