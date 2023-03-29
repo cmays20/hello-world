@@ -26,7 +26,7 @@
 
 - name: Create Red Hat Group
   community.general.gitlab_group:
-    api_url: "{{ gitlab_endpoint }}"
+    api_url: "{{ gitlab_endpoint }}/api/v4"
     validate_certs: false
     api_token: "{{ gitlab_access_token.json.access_token }}"
     name: Red Hat
@@ -35,7 +35,7 @@
 
 - name: Add user
   community.general.gitlab_user:
-    api_url: "{{ gitlab_endpoint }}"
+    api_url: "{{ gitlab_endpoint }}/api/v4"
     validate_certs: false
     api_token: "{{ gitlab_access_token.json.access_token }}"
     name: "{{ gitlab_full_username }}"
