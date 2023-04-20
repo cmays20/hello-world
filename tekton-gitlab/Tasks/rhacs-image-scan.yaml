@@ -78,3 +78,4 @@ spec:
         - --insecure-skip-tls-verify=$(INSECURE)
         - --output=$(OUTPUT)
         - --image=$(IMAGE)
+        - --force
