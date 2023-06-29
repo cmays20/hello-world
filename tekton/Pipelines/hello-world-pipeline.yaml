@@ -28,7 +28,7 @@ spec:
     - default: openjdk-11-el7
       name: VERSION
       type: string
-    - default: 'maven:3-openjdk-11-slim'
+    - default: 'maven:3-openjdk-17-slim'
       name: MAVEN_IMAGE
       type: string
     - default: 'https://github.com/cmays20/hello-world-deploy'
