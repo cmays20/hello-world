@@ -57,7 +57,7 @@ spec:
           - name: VERSION
             value: openjdk-11-el7
           - name: MAVEN_IMAGE
-            value: 'maven:3-openjdk-11-slim'
+            value: 'maven:3-openjdk-17-slim'
           - name: MANIFEST_WORKING_DIR
             value: environments/dev
         pipelineRef:
