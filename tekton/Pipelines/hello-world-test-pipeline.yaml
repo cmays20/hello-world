@@ -10,7 +10,7 @@ spec:
     - default: master
       name: GIT_REVISION
       type: string
-    - default: 'maven:3-openjdk-11-slim'
+    - default: 'maven:3-openjdk-17-slim'
       name: MAVEN_IMAGE
       type: string
     - name: REPO_FULL_NAME
