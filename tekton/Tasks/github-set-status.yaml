@@ -3,7 +3,6 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: github-set-status
-  namespace: hello-world
   labels:
     app.kubernetes.io/version: "0.2"
   annotations:

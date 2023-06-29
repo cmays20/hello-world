@@ -2,7 +2,6 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: oc-with-results
-  namespace: hello-world
 spec:
   description: >-
     This task runs commands against the cluster provided by user and if not

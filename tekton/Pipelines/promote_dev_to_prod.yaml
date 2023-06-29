@@ -6,7 +6,6 @@ metadata:
     app.kubernetes.io/name: hello-world
     pipeline.openshift.io/type: kubernetes
   name: promote-dev-to-prod
-  namespace: hello-world
 spec:
   params:
     - default: 'quay.io/cmays20/hello-world'

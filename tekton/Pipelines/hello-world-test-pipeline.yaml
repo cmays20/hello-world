@@ -2,7 +2,6 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: hello-world-test
-  namespace: hello-world
 spec:
   params:
     - default: 'https://github.com/cmays20/hello-world'

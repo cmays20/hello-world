@@ -2,7 +2,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: hello-world-manifest-workspace
-  namespace: hello-world
 spec:
   accessModes:
     - ReadWriteOnce
