@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dev-hello-world
+spec:
+  destination:
+    namespace: hello-world-dev
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: environments/dev
+    repoURL: 'https://github.com/cmays20/hello-world-deploy.git'
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
