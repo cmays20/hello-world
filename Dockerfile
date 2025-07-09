@@ -1,4 +1,5 @@
-FROM registry.access.redhat.com/ubi8/openjdk-17-runtime:1.15-1
+FROM registry.redhat.io/ubi8/openjdk-17
+LABEL io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"
 
 COPY target/*.jar /app.jar
 
