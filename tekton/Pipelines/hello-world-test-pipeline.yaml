@@ -67,8 +67,14 @@ spec:
         - name: deleteExisting
           value: 'true'
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: output
           workspace: workspace
@@ -84,6 +90,7 @@ spec:
       taskRef:
         kind: Task
         name: maven-with-cache
+        apiVersion: tekton.dev/v1
       workspaces:
         - name: source
           workspace: workspace

@@ -45,8 +45,14 @@ spec:
         - name: deleteExisting
           value: 'true'
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: output
           workspace: workspace
@@ -62,6 +68,7 @@ spec:
       taskRef:
         kind: Task
         name: maven-with-cache
+        apiVersion: tekton.dev/v1
       workspaces:
         - name: source
           workspace: workspace
@@ -78,8 +85,14 @@ spec:
       runAfter:
         - maven-build
       taskRef:
-        kind: ClusterTask
-        name: buildah
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: buildah
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: source
           workspace: workspace
@@ -92,8 +105,14 @@ spec:
         - name: deleteExisting
           value: 'true'
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: output
           workspace: manifest-workspace
@@ -106,6 +125,7 @@ spec:
       taskRef:
         kind: Task
         name: kustomize-update-image
+        apiVersion: tekton.dev/v1
       runAfter:
         - fetch-manifest-repository
         - build-image
@@ -126,8 +146,14 @@ spec:
             git remote add basic-auth-origin $(params.MANIFEST_GIT_REPO)
             git push basic-auth-origin HEAD:main
       taskRef:
-        kind: ClusterTask
-        name: git-cli
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-cli
+          - name: namespace
+            value: openshift-pipelines
       runAfter:
         - manifest-update-image
       workspaces:
