@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   name: kustomize-update-image
@@ -9,7 +9,7 @@ spec:
     - name: NEW_IMAGE
       type: string
   steps:
-    - image: 'k8s.gcr.io/kustomize/kustomize:v3.8.7'
+    - image: 'registry.k8s.io/kustomize/kustomize:v5.3.0'
       name: update-digest
       resources: {}
       script: |

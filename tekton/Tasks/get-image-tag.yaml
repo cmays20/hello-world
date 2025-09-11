@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   name: get-image-tag
@@ -10,7 +10,7 @@ spec:
     - description: Current image tag in WORKING_DIR
       name: image-tag
   steps:
-    - image: 'k8s.gcr.io/kustomize/kustomize:v3.8.7'
+    - image: 'registry.k8s.io/kustomize/kustomize:v5.3.0'
       name: get-staging-image
       resources: {}
       script: >

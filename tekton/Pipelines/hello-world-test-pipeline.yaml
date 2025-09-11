@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: hello-world-test
@@ -10,7 +10,7 @@ spec:
     - default: master
       name: GIT_REVISION
       type: string
-    - default: 'maven:3-openjdk-17-slim'
+    - default: 'registry.access.redhat.com/ubi9/openjdk-17:latest'
       name: MAVEN_IMAGE
       type: string
     - name: REPO_FULL_NAME
@@ -37,10 +37,20 @@ spec:
           value: pending
         - name: TARGET_URL
           value: >-
-            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
-        kind: Task
-        name: github-set-status
+        resolver: hub
+        params:
+          - name: catalog
+            value: tekton-catalog-tasks
+          - name: type
+            value: artifact
+          - name: kind
+            value: task
+          - name: name
+            value: github-set-status
+          - name: version
+            value: "0.4"
       when:
         - input: $(params.SHA)
           operator: notin
@@ -94,10 +104,20 @@ spec:
           value: error
         - name: TARGET_URL
           value: >-
-            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
-        kind: Task
-        name: github-set-status
+        resolver: hub
+        params:
+          - name: catalog
+            value: tekton-catalog-tasks
+          - name: type
+            value: artifact
+          - name: kind
+            value: task
+          - name: name
+            value: github-set-status
+          - name: version
+            value: "0.4"
       when:
         - input: $(tasks.maven-build.status)
           operator: in
@@ -119,10 +139,20 @@ spec:
           value: success
         - name: TARGET_URL
           value: >-
-            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs
+            https://$(tasks.get-route-to-console.results.oc-output)/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1~PipelineRun/$(context.pipelineRun.name)/logs
       taskRef:
-        kind: Task
-        name: github-set-status
+        resolver: hub
+        params:
+          - name: catalog
+            value: tekton-catalog-tasks
+          - name: type
+            value: artifact
+          - name: kind
+            value: task
+          - name: name
+            value: github-set-status
+          - name: version
+            value: "0.4"
       when:
         - input: $(tasks.maven-build.status)
           operator: in
